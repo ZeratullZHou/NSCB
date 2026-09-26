@@ -24,7 +24,9 @@ blob = zlib.decompress(raw[pos:pos+length])
 orig_co = marshal.loads(blob)
 print('original co_filename:', orig_co.co_filename)
 
-fn = sys.argv[1] if len(sys.argv) > 1 else r'D:\switch\NSCB_source\py\ztools\lib\Keys.py'
+# 1.01b 原版 Keys.py 需从上游 git 历史提取:
+#   git show 0cbb7b2:py/ztools/lib/Keys.py
+fn = sys.argv[1] if len(sys.argv) > 1 else 'tools/py/ztools/lib/Keys.py'
 src = io.open(fn, encoding='utf-8').read()
 new_co = compile(src, orig_co.co_filename, 'exec')
 
