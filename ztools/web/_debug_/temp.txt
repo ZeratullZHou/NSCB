@@ -1,0 +1,2 @@
+Exception: int() argument must be a string, a bytes-like object or a number, not 'NoneType'
+Exception: int() argument must be a string, a bytes-like object or a number, not 'NoneType'

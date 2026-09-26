@@ -1,0 +1,42 @@
+name: Build Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Package runnable distribution
+        run: |
+          VERSION="${GITHUB_REF_NAME}"
+          PKG="NSCB_${VERSION}"
+          mkdir -p "dist/${PKG}"
+          rsync -a ./ "dist/${PKG}/" \
+            --exclude '.git' \
+            --exclude '.github' \
+            --exclude 'tools' \
+            --exclude 'dist' \
+            --exclude 'keys.txt'
+          cd dist
+          zip -r "../${PKG}.zip" "${PKG}"
+          cd ..
+          sha256sum "${PKG}.zip" > "${PKG}.zip.sha256"
+
+      - name: Create Release and Upload
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            NSCB_*.zip
+            NSCB_*.zip.sha256
+          generate_release_notes: true

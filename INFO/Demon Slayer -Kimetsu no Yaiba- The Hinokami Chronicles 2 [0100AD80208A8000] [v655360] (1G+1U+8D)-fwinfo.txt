@@ -1,0 +1,589 @@
+-----------------------------
+CONTENT ID: 0100ad80208a8000
+-----------------------------
+Titleinfo:
+- Name: Demon Slayer -Kimetsu no Yaiba- The Hinokami Chronicles 2
+- Editor: SEGA CORPORATION
+- Display Version: 1.00
+- Meta SDK version: 20.5.0.0
+- Program SDK version: 16.2.9.0
+- Supported Languages: US (eng), JP, FR, DE, SPA, IT, TW (ch), CH
+- Content type: Base Game or Application
+- Version: 0 -> Application (0)
+
+Required Firmware:
+- Included Firmware: Deleted
+- RequiredSystemVersion: 1342177280 -> (20.0.0)
+- Encryption (keygeneration): 18 -> UNKNOWN
+- Patchable to: 1342177280 -> (20.0.0)
+
+ExeFS Data:
+- BuildID8: E22022FB7024085F
+- BuildID:  E22022FB7024085F5E1E31B25DCAC8EF
+Eshop Data:
+- nsuId: 70010000086956
+- Data from Region: America
+- Number of Players: 2
+- Release Date: 05/08/2025
+- Genres: Action, Fighting
+- AgeRating: 17
+- Rating tags: Blood and Gore, Language, Suggestive Themes, Violence, In-Game
+  Purchases
+
+Description:
+-----------------------------------------------------------------------------
+ DESTROY DEMONS WITH THE POWER OF FORGED BONDS! TANJIRO KAMADO'S BATTLE WILL
+ ONCE AGAIN UNFOLD...
+-----------------------------------------------------------------------------
+ Please note this is the Standard Edition.  Be aware there is also a Deluxe
+ Edition available, so please ensure your selection before purchasing.  Destroy
+ demons with the power of forged bonds!  Tanjiro Kamado's battle will once again
+ unfold...  Single Player: Story Mode Play as Tanjiro and relive the
+ Entertainment District Arc, the Swordsmith Village Arc, and the Hashira
+ Training Arc from the TV anime, Demon Slayer: Kimetsu no Yaiba!  Battle Upper
+ Rank demons with your allies!  VS Mode: The Hashira unite!  The game features
+ over 40 characters, including the nine Hashira, the highest-ranking swordsmen
+ of the Demon Slayer Corps!  New elements, such as Dual Ultimates and Gear, have
+ been added!  Take on new challenges both online and offline!  Standard Edition
+ Content: - Demon Slayer -Kimetsu no Yaiba- The Hinokami Chronicles 2 Main Game
+ - Digital Version Bonus - Character Unlock Keys: Academy Rengoku and Academy
+ Uzui   Bonus for linking save data: The following bonuses will be available for
+ players with save data from Demon Slayer -Kimetsu no Yaiba- The Hinokami
+ Chronicles or Demon Slayer -Kimetsu no Yaiba- Sweep The Board!  - Bonus for
+ Demon Slayer -Kimetsu no Yaiba- The Hinokami Chronicles save data: Character
+ Unlock Keys: Academy Tanjiro, Academy Nezuko, Academy Zenitsu, Academy Inosuke,
+ Academy Giyu.  Academy Shinobu - Bonus for Demon Slayer -Kimetsu no Yaiba-
+ Sweep The Board!  save data: Character Unlock Key: Hinatsuru, Makio and Suma
+ Battle Attire: Hinatsuru, Makio and Suma Kimono (Meal Prep)  *Character Unlock
+ Keys are bonuses that allow you to play the specified character in VS Mode at
+ the very start.  *Battle Attire can be used in VS Mode.  *Bonuses for linking
+ save data are only applicable for games on the same platform.  *Online play in
+ VS Mode requires a Nintendo Switch Online membership (paid). *The latest patch
+ must be installed in order to use online features.  *Contents and
+ specifications are subject to change without notice.  *The digital version
+ bonuses are permanent.  *Bonuses may be distributed at a later date.
+-----------------------------
+CONTENT ID: 0100ad80208a9001
+-----------------------------
+Titleinfo:
+- Content type: DLC
+- DLC number: 1 -> AddOnContent (1)
+- DLC version Number: 0 -> Version (0)
+- Meta SDK version: 0.12.17.0
+- Data SDK version: 0.12.17.0
+
+Required Firmware:
+- Included Firmware: Deleted
+- Required game version: 0 -> Application (0)
+- Encryption (keygeneration): 0 -> (1.0.0)
+- Patchable to: DLC -> no RSV to patch
+
+Eshop Data:
+- nsuId: 70050000057640
+- Data from Region: America
+- Number of Players: 2
+- Release Date: 05/08/2025
+- Genres: Action, Fighting
+- AgeRating: 17
+- Rating tags: Blood and Gore, Language, Suggestive Themes, Violence, In-Game
+  Purchases
+
+Description:
+-----------------------------------------------------------------------------
+ DESTROY DEMONS WITH THE POWER OF FORGED BONDS! TANJIRO KAMADO'S BATTLE WILL
+ ONCE AGAIN UNFOLD...
+-----------------------------------------------------------------------------
+ Please note this is the Standard Edition.  Be aware there is also a Deluxe
+ Edition available, so please ensure your selection before purchasing.  Destroy
+ demons with the power of forged bonds!  Tanjiro Kamado's battle will once again
+ unfold...  Single Player: Story Mode Play as Tanjiro and relive the
+ Entertainment District Arc, the Swordsmith Village Arc, and the Hashira
+ Training Arc from the TV anime, Demon Slayer: Kimetsu no Yaiba!  Battle Upper
+ Rank demons with your allies!  VS Mode: The Hashira unite!  The game features
+ over 40 characters, including the nine Hashira, the highest-ranking swordsmen
+ of the Demon Slayer Corps!  New elements, such as Dual Ultimates and Gear, have
+ been added!  Take on new challenges both online and offline!  Standard Edition
+ Content: - Demon Slayer -Kimetsu no Yaiba- The Hinokami Chronicles 2 Main Game
+ - Digital Version Bonus - Character Unlock Keys: Academy Rengoku and Academy
+ Uzui   Bonus for linking save data: The following bonuses will be available for
+ players with save data from Demon Slayer -Kimetsu no Yaiba- The Hinokami
+ Chronicles or Demon Slayer -Kimetsu no Yaiba- Sweep The Board!  - Bonus for
+ Demon Slayer -Kimetsu no Yaiba- The Hinokami Chronicles save data: Character
+ Unlock Keys: Academy Tanjiro, Academy Nezuko, Academy Zenitsu, Academy Inosuke,
+ Academy Giyu.  Academy Shinobu - Bonus for Demon Slayer -Kimetsu no Yaiba-
+ Sweep The Board!  save data: Character Unlock Key: Hinatsuru, Makio and Suma
+ Battle Attire: Hinatsuru, Makio and Suma Kimono (Meal Prep)  *Character Unlock
+ Keys are bonuses that allow you to play the specified character in VS Mode at
+ the very start.  *Battle Attire can be used in VS Mode.  *Bonuses for linking
+ save data are only applicable for games on the same platform.  *Online play in
+ VS Mode requires a Nintendo Switch Online membership (paid). *The latest patch
+ must be installed in order to use online features.  *Contents and
+ specifications are subject to change without notice.  *The digital version
+ bonuses are permanent.  *Bonuses may be distributed at a later date.
+-----------------------------
+CONTENT ID: 0100ad80208a9002
+-----------------------------
+Titleinfo:
+- Content type: DLC
+- DLC number: 2 -> AddOnContent (2)
+- DLC version Number: 0 -> Version (0)
+- Meta SDK version: 0.12.17.0
+- Data SDK version: 0.12.17.0
+
+Required Firmware:
+- Included Firmware: Deleted
+- Required game version: 0 -> Application (0)
+- Encryption (keygeneration): 0 -> (1.0.0)
+- Patchable to: DLC -> no RSV to patch
+
+Eshop Data:
+- nsuId: 70050000057641
+- Data from Region: America
+- Number of Players: 2
+- Release Date: 05/08/2025
+- Genres: Action, Fighting
+- AgeRating: 17
+- Rating tags: Blood and Gore, Language, Suggestive Themes, Violence, In-Game
+  Purchases
+
+Description:
+-----------------------------------------------------------------------------
+ DESTROY DEMONS WITH THE POWER OF FORGED BONDS! TANJIRO KAMADO'S BATTLE WILL
+ ONCE AGAIN UNFOLD...
+-----------------------------------------------------------------------------
+ Please note this is the Standard Edition.  Be aware there is also a Deluxe
+ Edition available, so please ensure your selection before purchasing.  Destroy
+ demons with the power of forged bonds!  Tanjiro Kamado's battle will once again
+ unfold...  Single Player: Story Mode Play as Tanjiro and relive the
+ Entertainment District Arc, the Swordsmith Village Arc, and the Hashira
+ Training Arc from the TV anime, Demon Slayer: Kimetsu no Yaiba!  Battle Upper
+ Rank demons with your allies!  VS Mode: The Hashira unite!  The game features
+ over 40 characters, including the nine Hashira, the highest-ranking swordsmen
+ of the Demon Slayer Corps!  New elements, such as Dual Ultimates and Gear, have
+ been added!  Take on new challenges both online and offline!  Standard Edition
+ Content: - Demon Slayer -Kimetsu no Yaiba- The Hinokami Chronicles 2 Main Game
+ - Digital Version Bonus - Character Unlock Keys: Academy Rengoku and Academy
+ Uzui   Bonus for linking save data: The following bonuses will be available for
+ players with save data from Demon Slayer -Kimetsu no Yaiba- The Hinokami
+ Chronicles or Demon Slayer -Kimetsu no Yaiba- Sweep The Board!  - Bonus for
+ Demon Slayer -Kimetsu no Yaiba- The Hinokami Chronicles save data: Character
+ Unlock Keys: Academy Tanjiro, Academy Nezuko, Academy Zenitsu, Academy Inosuke,
+ Academy Giyu.  Academy Shinobu - Bonus for Demon Slayer -Kimetsu no Yaiba-
+ Sweep The Board!  save data: Character Unlock Key: Hinatsuru, Makio and Suma
+ Battle Attire: Hinatsuru, Makio and Suma Kimono (Meal Prep)  *Character Unlock
+ Keys are bonuses that allow you to play the specified character in VS Mode at
+ the very start.  *Battle Attire can be used in VS Mode.  *Bonuses for linking
+ save data are only applicable for games on the same platform.  *Online play in
+ VS Mode requires a Nintendo Switch Online membership (paid). *The latest patch
+ must be installed in order to use online features.  *Contents and
+ specifications are subject to change without notice.  *The digital version
+ bonuses are permanent.  *Bonuses may be distributed at a later date.
+-----------------------------
+CONTENT ID: 0100ad80208a9003
+-----------------------------
+Titleinfo:
+- Content type: DLC
+- DLC number: 3 -> AddOnContent (3)
+- DLC version Number: 0 -> Version (0)
+- Meta SDK version: 0.12.17.0
+- Data SDK version: 0.12.17.0
+
+Required Firmware:
+- Included Firmware: Deleted
+- Required game version: 0 -> Application (0)
+- Encryption (keygeneration): 0 -> (1.0.0)
+- Patchable to: DLC -> no RSV to patch
+
+Eshop Data:
+- nsuId: 70050000057642
+- Data from Region: America
+- Number of Players: 2
+- Release Date: 05/08/2025
+- Genres: Action, Fighting
+- AgeRating: 17
+- Rating tags: Blood and Gore, Language, Suggestive Themes, Violence, In-Game
+  Purchases
+
+Description:
+-----------------------------------------------------------------------------
+ DESTROY DEMONS WITH THE POWER OF FORGED BONDS! TANJIRO KAMADO'S BATTLE WILL
+ ONCE AGAIN UNFOLD...
+-----------------------------------------------------------------------------
+ Please note this is the Standard Edition.  Be aware there is also a Deluxe
+ Edition available, so please ensure your selection before purchasing.  Destroy
+ demons with the power of forged bonds!  Tanjiro Kamado's battle will once again
+ unfold...  Single Player: Story Mode Play as Tanjiro and relive the
+ Entertainment District Arc, the Swordsmith Village Arc, and the Hashira
+ Training Arc from the TV anime, Demon Slayer: Kimetsu no Yaiba!  Battle Upper
+ Rank demons with your allies!  VS Mode: The Hashira unite!  The game features
+ over 40 characters, including the nine Hashira, the highest-ranking swordsmen
+ of the Demon Slayer Corps!  New elements, such as Dual Ultimates and Gear, have
+ been added!  Take on new challenges both online and offline!  Standard Edition
+ Content: - Demon Slayer -Kimetsu no Yaiba- The Hinokami Chronicles 2 Main Game
+ - Digital Version Bonus - Character Unlock Keys: Academy Rengoku and Academy
+ Uzui   Bonus for linking save data: The following bonuses will be available for
+ players with save data from Demon Slayer -Kimetsu no Yaiba- The Hinokami
+ Chronicles or Demon Slayer -Kimetsu no Yaiba- Sweep The Board!  - Bonus for
+ Demon Slayer -Kimetsu no Yaiba- The Hinokami Chronicles save data: Character
+ Unlock Keys: Academy Tanjiro, Academy Nezuko, Academy Zenitsu, Academy Inosuke,
+ Academy Giyu.  Academy Shinobu - Bonus for Demon Slayer -Kimetsu no Yaiba-
+ Sweep The Board!  save data: Character Unlock Key: Hinatsuru, Makio and Suma
+ Battle Attire: Hinatsuru, Makio and Suma Kimono (Meal Prep)  *Character Unlock
+ Keys are bonuses that allow you to play the specified character in VS Mode at
+ the very start.  *Battle Attire can be used in VS Mode.  *Bonuses for linking
+ save data are only applicable for games on the same platform.  *Online play in
+ VS Mode requires a Nintendo Switch Online membership (paid). *The latest patch
+ must be installed in order to use online features.  *Contents and
+ specifications are subject to change without notice.  *The digital version
+ bonuses are permanent.  *Bonuses may be distributed at a later date.
+-----------------------------
+CONTENT ID: 0100ad80208a9004
+-----------------------------
+Titleinfo:
+- Content type: DLC
+- DLC number: 4 -> AddOnContent (4)
+- DLC version Number: 0 -> Version (0)
+- Meta SDK version: 0.12.17.0
+- Data SDK version: 0.12.17.0
+
+Required Firmware:
+- Included Firmware: Deleted
+- Required game version: 0 -> Application (0)
+- Encryption (keygeneration): 0 -> (1.0.0)
+- Patchable to: DLC -> no RSV to patch
+
+Eshop Data:
+- nsuId: 70050000057643
+- Data from Region: America
+- Number of Players: 2
+- Release Date: 05/08/2025
+- Genres: Action, Fighting
+- AgeRating: 17
+- Rating tags: Blood and Gore, Language, Suggestive Themes, Violence, In-Game
+  Purchases
+
+Description:
+-----------------------------------------------------------------------------
+ DESTROY DEMONS WITH THE POWER OF FORGED BONDS! TANJIRO KAMADO'S BATTLE WILL
+ ONCE AGAIN UNFOLD...
+-----------------------------------------------------------------------------
+ Please note this is the Standard Edition.  Be aware there is also a Deluxe
+ Edition available, so please ensure your selection before purchasing.  Destroy
+ demons with the power of forged bonds!  Tanjiro Kamado's battle will once again
+ unfold...  Single Player: Story Mode Play as Tanjiro and relive the
+ Entertainment District Arc, the Swordsmith Village Arc, and the Hashira
+ Training Arc from the TV anime, Demon Slayer: Kimetsu no Yaiba!  Battle Upper
+ Rank demons with your allies!  VS Mode: The Hashira unite!  The game features
+ over 40 characters, including the nine Hashira, the highest-ranking swordsmen
+ of the Demon Slayer Corps!  New elements, such as Dual Ultimates and Gear, have
+ been added!  Take on new challenges both online and offline!  Standard Edition
+ Content: - Demon Slayer -Kimetsu no Yaiba- The Hinokami Chronicles 2 Main Game
+ - Digital Version Bonus - Character Unlock Keys: Academy Rengoku and Academy
+ Uzui   Bonus for linking save data: The following bonuses will be available for
+ players with save data from Demon Slayer -Kimetsu no Yaiba- The Hinokami
+ Chronicles or Demon Slayer -Kimetsu no Yaiba- Sweep The Board!  - Bonus for
+ Demon Slayer -Kimetsu no Yaiba- The Hinokami Chronicles save data: Character
+ Unlock Keys: Academy Tanjiro, Academy Nezuko, Academy Zenitsu, Academy Inosuke,
+ Academy Giyu.  Academy Shinobu - Bonus for Demon Slayer -Kimetsu no Yaiba-
+ Sweep The Board!  save data: Character Unlock Key: Hinatsuru, Makio and Suma
+ Battle Attire: Hinatsuru, Makio and Suma Kimono (Meal Prep)  *Character Unlock
+ Keys are bonuses that allow you to play the specified character in VS Mode at
+ the very start.  *Battle Attire can be used in VS Mode.  *Bonuses for linking
+ save data are only applicable for games on the same platform.  *Online play in
+ VS Mode requires a Nintendo Switch Online membership (paid). *The latest patch
+ must be installed in order to use online features.  *Contents and
+ specifications are subject to change without notice.  *The digital version
+ bonuses are permanent.  *Bonuses may be distributed at a later date.
+-----------------------------
+CONTENT ID: 0100ad80208a9005
+-----------------------------
+Titleinfo:
+- Content type: DLC
+- DLC number: 5 -> AddOnContent (5)
+- DLC version Number: 0 -> Version (0)
+- Meta SDK version: 0.12.17.0
+- Data SDK version: 0.12.17.0
+
+Required Firmware:
+- Included Firmware: Deleted
+- Required game version: 0 -> Application (0)
+- Encryption (keygeneration): 0 -> (1.0.0)
+- Patchable to: DLC -> no RSV to patch
+
+Eshop Data:
+- nsuId: 70050000057644
+- Data from Region: America
+- Number of Players: 2
+- Release Date: 05/08/2025
+- Genres: Action, Fighting
+- AgeRating: 17
+- Rating tags: Blood and Gore, Language, Suggestive Themes, Violence, In-Game
+  Purchases
+
+Description:
+-----------------------------------------------------------------------------
+ DESTROY DEMONS WITH THE POWER OF FORGED BONDS! TANJIRO KAMADO'S BATTLE WILL
+ ONCE AGAIN UNFOLD...
+-----------------------------------------------------------------------------
+ Please note this is the Standard Edition.  Be aware there is also a Deluxe
+ Edition available, so please ensure your selection before purchasing.  Destroy
+ demons with the power of forged bonds!  Tanjiro Kamado's battle will once again
+ unfold...  Single Player: Story Mode Play as Tanjiro and relive the
+ Entertainment District Arc, the Swordsmith Village Arc, and the Hashira
+ Training Arc from the TV anime, Demon Slayer: Kimetsu no Yaiba!  Battle Upper
+ Rank demons with your allies!  VS Mode: The Hashira unite!  The game features
+ over 40 characters, including the nine Hashira, the highest-ranking swordsmen
+ of the Demon Slayer Corps!  New elements, such as Dual Ultimates and Gear, have
+ been added!  Take on new challenges both online and offline!  Standard Edition
+ Content: - Demon Slayer -Kimetsu no Yaiba- The Hinokami Chronicles 2 Main Game
+ - Digital Version Bonus - Character Unlock Keys: Academy Rengoku and Academy
+ Uzui   Bonus for linking save data: The following bonuses will be available for
+ players with save data from Demon Slayer -Kimetsu no Yaiba- The Hinokami
+ Chronicles or Demon Slayer -Kimetsu no Yaiba- Sweep The Board!  - Bonus for
+ Demon Slayer -Kimetsu no Yaiba- The Hinokami Chronicles save data: Character
+ Unlock Keys: Academy Tanjiro, Academy Nezuko, Academy Zenitsu, Academy Inosuke,
+ Academy Giyu.  Academy Shinobu - Bonus for Demon Slayer -Kimetsu no Yaiba-
+ Sweep The Board!  save data: Character Unlock Key: Hinatsuru, Makio and Suma
+ Battle Attire: Hinatsuru, Makio and Suma Kimono (Meal Prep)  *Character Unlock
+ Keys are bonuses that allow you to play the specified character in VS Mode at
+ the very start.  *Battle Attire can be used in VS Mode.  *Bonuses for linking
+ save data are only applicable for games on the same platform.  *Online play in
+ VS Mode requires a Nintendo Switch Online membership (paid). *The latest patch
+ must be installed in order to use online features.  *Contents and
+ specifications are subject to change without notice.  *The digital version
+ bonuses are permanent.  *Bonuses may be distributed at a later date.
+-----------------------------
+CONTENT ID: 0100ad80208a9007
+-----------------------------
+Titleinfo:
+- Content type: DLC
+- DLC number: 7 -> AddOnContent (7)
+- DLC version Number: 0 -> Version (0)
+- Meta SDK version: 0.12.17.0
+- Data SDK version: 0.12.17.0
+
+Required Firmware:
+- Included Firmware: Deleted
+- Required game version: 0 -> Application (0)
+- Encryption (keygeneration): 0 -> (1.0.0)
+- Patchable to: DLC -> no RSV to patch
+
+Eshop Data:
+- Data from Region: America
+- Number of Players: 2
+- Release Date: 05/08/2025
+- Genres: Action, Fighting
+- AgeRating: 17
+- Rating tags: Blood and Gore, Language, Suggestive Themes, Violence, In-Game
+  Purchases
+
+Description:
+-----------------------------------------------------------------------------
+ DESTROY DEMONS WITH THE POWER OF FORGED BONDS! TANJIRO KAMADO'S BATTLE WILL
+ ONCE AGAIN UNFOLD...
+-----------------------------------------------------------------------------
+ Please note this is the Standard Edition.  Be aware there is also a Deluxe
+ Edition available, so please ensure your selection before purchasing.  Destroy
+ demons with the power of forged bonds!  Tanjiro Kamado's battle will once again
+ unfold...  Single Player: Story Mode Play as Tanjiro and relive the
+ Entertainment District Arc, the Swordsmith Village Arc, and the Hashira
+ Training Arc from the TV anime, Demon Slayer: Kimetsu no Yaiba!  Battle Upper
+ Rank demons with your allies!  VS Mode: The Hashira unite!  The game features
+ over 40 characters, including the nine Hashira, the highest-ranking swordsmen
+ of the Demon Slayer Corps!  New elements, such as Dual Ultimates and Gear, have
+ been added!  Take on new challenges both online and offline!  Standard Edition
+ Content: - Demon Slayer -Kimetsu no Yaiba- The Hinokami Chronicles 2 Main Game
+ - Digital Version Bonus - Character Unlock Keys: Academy Rengoku and Academy
+ Uzui   Bonus for linking save data: The following bonuses will be available for
+ players with save data from Demon Slayer -Kimetsu no Yaiba- The Hinokami
+ Chronicles or Demon Slayer -Kimetsu no Yaiba- Sweep The Board!  - Bonus for
+ Demon Slayer -Kimetsu no Yaiba- The Hinokami Chronicles save data: Character
+ Unlock Keys: Academy Tanjiro, Academy Nezuko, Academy Zenitsu, Academy Inosuke,
+ Academy Giyu.  Academy Shinobu - Bonus for Demon Slayer -Kimetsu no Yaiba-
+ Sweep The Board!  save data: Character Unlock Key: Hinatsuru, Makio and Suma
+ Battle Attire: Hinatsuru, Makio and Suma Kimono (Meal Prep)  *Character Unlock
+ Keys are bonuses that allow you to play the specified character in VS Mode at
+ the very start.  *Battle Attire can be used in VS Mode.  *Bonuses for linking
+ save data are only applicable for games on the same platform.  *Online play in
+ VS Mode requires a Nintendo Switch Online membership (paid). *The latest patch
+ must be installed in order to use online features.  *Contents and
+ specifications are subject to change without notice.  *The digital version
+ bonuses are permanent.  *Bonuses may be distributed at a later date.
+-----------------------------
+CONTENT ID: 0100ad80208a9008
+-----------------------------
+Titleinfo:
+- Content type: DLC
+- DLC number: 8 -> AddOnContent (8)
+- DLC version Number: 0 -> Version (0)
+- Meta SDK version: 0.12.17.0
+- Data SDK version: 0.12.17.0
+
+Required Firmware:
+- Included Firmware: Deleted
+- Required game version: 0 -> Application (0)
+- Encryption (keygeneration): 0 -> (1.0.0)
+- Patchable to: DLC -> no RSV to patch
+
+Eshop Data:
+- Data from Region: America
+- Number of Players: 2
+- Release Date: 05/08/2025
+- Genres: Action, Fighting
+- AgeRating: 17
+- Rating tags: Blood and Gore, Language, Suggestive Themes, Violence, In-Game
+  Purchases
+
+Description:
+-----------------------------------------------------------------------------
+ DESTROY DEMONS WITH THE POWER OF FORGED BONDS! TANJIRO KAMADO'S BATTLE WILL
+ ONCE AGAIN UNFOLD...
+-----------------------------------------------------------------------------
+ Please note this is the Standard Edition.  Be aware there is also a Deluxe
+ Edition available, so please ensure your selection before purchasing.  Destroy
+ demons with the power of forged bonds!  Tanjiro Kamado's battle will once again
+ unfold...  Single Player: Story Mode Play as Tanjiro and relive the
+ Entertainment District Arc, the Swordsmith Village Arc, and the Hashira
+ Training Arc from the TV anime, Demon Slayer: Kimetsu no Yaiba!  Battle Upper
+ Rank demons with your allies!  VS Mode: The Hashira unite!  The game features
+ over 40 characters, including the nine Hashira, the highest-ranking swordsmen
+ of the Demon Slayer Corps!  New elements, such as Dual Ultimates and Gear, have
+ been added!  Take on new challenges both online and offline!  Standard Edition
+ Content: - Demon Slayer -Kimetsu no Yaiba- The Hinokami Chronicles 2 Main Game
+ - Digital Version Bonus - Character Unlock Keys: Academy Rengoku and Academy
+ Uzui   Bonus for linking save data: The following bonuses will be available for
+ players with save data from Demon Slayer -Kimetsu no Yaiba- The Hinokami
+ Chronicles or Demon Slayer -Kimetsu no Yaiba- Sweep The Board!  - Bonus for
+ Demon Slayer -Kimetsu no Yaiba- The Hinokami Chronicles save data: Character
+ Unlock Keys: Academy Tanjiro, Academy Nezuko, Academy Zenitsu, Academy Inosuke,
+ Academy Giyu.  Academy Shinobu - Bonus for Demon Slayer -Kimetsu no Yaiba-
+ Sweep The Board!  save data: Character Unlock Key: Hinatsuru, Makio and Suma
+ Battle Attire: Hinatsuru, Makio and Suma Kimono (Meal Prep)  *Character Unlock
+ Keys are bonuses that allow you to play the specified character in VS Mode at
+ the very start.  *Battle Attire can be used in VS Mode.  *Bonuses for linking
+ save data are only applicable for games on the same platform.  *Online play in
+ VS Mode requires a Nintendo Switch Online membership (paid). *The latest patch
+ must be installed in order to use online features.  *Contents and
+ specifications are subject to change without notice.  *The digital version
+ bonuses are permanent.  *Bonuses may be distributed at a later date.
+-----------------------------
+CONTENT ID: 0100ad80208a9009
+-----------------------------
+Titleinfo:
+- Content type: DLC
+- DLC number: 9 -> AddOnContent (9)
+- DLC version Number: 0 -> Version (0)
+- Meta SDK version: 0.12.17.0
+- Data SDK version: 0.12.17.0
+
+Required Firmware:
+- Included Firmware: Deleted
+- Required game version: 0 -> Application (0)
+- Encryption (keygeneration): 0 -> (1.0.0)
+- Patchable to: DLC -> no RSV to patch
+
+Eshop Data:
+- Data from Region: America
+- Number of Players: 2
+- Release Date: 05/08/2025
+- Genres: Action, Fighting
+- AgeRating: 17
+- Rating tags: Blood and Gore, Language, Suggestive Themes, Violence, In-Game
+  Purchases
+
+Description:
+-----------------------------------------------------------------------------
+ DESTROY DEMONS WITH THE POWER OF FORGED BONDS! TANJIRO KAMADO'S BATTLE WILL
+ ONCE AGAIN UNFOLD...
+-----------------------------------------------------------------------------
+ Please note this is the Standard Edition.  Be aware there is also a Deluxe
+ Edition available, so please ensure your selection before purchasing.  Destroy
+ demons with the power of forged bonds!  Tanjiro Kamado's battle will once again
+ unfold...  Single Player: Story Mode Play as Tanjiro and relive the
+ Entertainment District Arc, the Swordsmith Village Arc, and the Hashira
+ Training Arc from the TV anime, Demon Slayer: Kimetsu no Yaiba!  Battle Upper
+ Rank demons with your allies!  VS Mode: The Hashira unite!  The game features
+ over 40 characters, including the nine Hashira, the highest-ranking swordsmen
+ of the Demon Slayer Corps!  New elements, such as Dual Ultimates and Gear, have
+ been added!  Take on new challenges both online and offline!  Standard Edition
+ Content: - Demon Slayer -Kimetsu no Yaiba- The Hinokami Chronicles 2 Main Game
+ - Digital Version Bonus - Character Unlock Keys: Academy Rengoku and Academy
+ Uzui   Bonus for linking save data: The following bonuses will be available for
+ players with save data from Demon Slayer -Kimetsu no Yaiba- The Hinokami
+ Chronicles or Demon Slayer -Kimetsu no Yaiba- Sweep The Board!  - Bonus for
+ Demon Slayer -Kimetsu no Yaiba- The Hinokami Chronicles save data: Character
+ Unlock Keys: Academy Tanjiro, Academy Nezuko, Academy Zenitsu, Academy Inosuke,
+ Academy Giyu.  Academy Shinobu - Bonus for Demon Slayer -Kimetsu no Yaiba-
+ Sweep The Board!  save data: Character Unlock Key: Hinatsuru, Makio and Suma
+ Battle Attire: Hinatsuru, Makio and Suma Kimono (Meal Prep)  *Character Unlock
+ Keys are bonuses that allow you to play the specified character in VS Mode at
+ the very start.  *Battle Attire can be used in VS Mode.  *Bonuses for linking
+ save data are only applicable for games on the same platform.  *Online play in
+ VS Mode requires a Nintendo Switch Online membership (paid). *The latest patch
+ must be installed in order to use online features.  *Contents and
+ specifications are subject to change without notice.  *The digital version
+ bonuses are permanent.  *Bonuses may be distributed at a later date.
+-----------------------------
+CONTENT ID: 0100ad80208a8800
+-----------------------------
+Titleinfo:
+- Name: Demon Slayer -Kimetsu no Yaiba- The Hinokami Chronicles 2
+- Editor: SEGA CORPORATION
+- Display Version: 1.50
+- Meta SDK version: 21.4.0.0
+- Program SDK version: 16.2.9.0
+- Supported Languages: US (eng), JP, FR, DE, SPA, IT, TW (ch), CH
+- Content type: Update
+- Version: 655360 -> Patch (10)
+
+Required Firmware:
+- Included Firmware: Deleted
+- RequiredSystemVersion: 1411383296 -> (21.2.0)
+- Encryption (keygeneration): 18 -> UNKNOWN
+- Patchable to: 1411383296 -> (21.2.0)
+
+ExeFS Data:
+- BuildID8: E22022FB7024085F
+- BuildID:  E22022FB7024085F5E1E31B25DCAC8EF
+Eshop Data:
+- nsuId: 70010000086956
+- Data from Region: America
+- Number of Players: 2
+- Release Date: 05/08/2025
+- Genres: Action, Fighting
+- AgeRating: 17
+- Rating tags: Blood and Gore, Language, Suggestive Themes, Violence, In-Game
+  Purchases
+
+Description:
+-----------------------------------------------------------------------------
+ DESTROY DEMONS WITH THE POWER OF FORGED BONDS! TANJIRO KAMADO'S BATTLE WILL
+ ONCE AGAIN UNFOLD...
+-----------------------------------------------------------------------------
+ Please note this is the Standard Edition.  Be aware there is also a Deluxe
+ Edition available, so please ensure your selection before purchasing.  Destroy
+ demons with the power of forged bonds!  Tanjiro Kamado's battle will once again
+ unfold...  Single Player: Story Mode Play as Tanjiro and relive the
+ Entertainment District Arc, the Swordsmith Village Arc, and the Hashira
+ Training Arc from the TV anime, Demon Slayer: Kimetsu no Yaiba!  Battle Upper
+ Rank demons with your allies!  VS Mode: The Hashira unite!  The game features
+ over 40 characters, including the nine Hashira, the highest-ranking swordsmen
+ of the Demon Slayer Corps!  New elements, such as Dual Ultimates and Gear, have
+ been added!  Take on new challenges both online and offline!  Standard Edition
+ Content: - Demon Slayer -Kimetsu no Yaiba- The Hinokami Chronicles 2 Main Game
+ - Digital Version Bonus - Character Unlock Keys: Academy Rengoku and Academy
+ Uzui   Bonus for linking save data: The following bonuses will be available for
+ players with save data from Demon Slayer -Kimetsu no Yaiba- The Hinokami
+ Chronicles or Demon Slayer -Kimetsu no Yaiba- Sweep The Board!  - Bonus for
+ Demon Slayer -Kimetsu no Yaiba- The Hinokami Chronicles save data: Character
+ Unlock Keys: Academy Tanjiro, Academy Nezuko, Academy Zenitsu, Academy Inosuke,
+ Academy Giyu.  Academy Shinobu - Bonus for Demon Slayer -Kimetsu no Yaiba-
+ Sweep The Board!  save data: Character Unlock Key: Hinatsuru, Makio and Suma
+ Battle Attire: Hinatsuru, Makio and Suma Kimono (Meal Prep)  *Character Unlock
+ Keys are bonuses that allow you to play the specified character in VS Mode at
+ the very start.  *Battle Attire can be used in VS Mode.  *Bonuses for linking
+ save data are only applicable for games on the same platform.  *Online play in
+ VS Mode requires a Nintendo Switch Online membership (paid). *The latest patch
+ must be installed in order to use online features.  *Contents and
+ specifications are subject to change without notice.  *The digital version
+ bonuses are permanent.  *Bonuses may be distributed at a later date.

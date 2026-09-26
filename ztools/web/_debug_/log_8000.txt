@@ -1,0 +1,183 @@
+NSC_Builder by JulesOnTheRoad
+Launched using Chrome Installation
+Chrome wasn't detected. Launched using Windows Edge with limited compatibility
+Exception: [Errno 2] No such file or directory: 'F:\\NSCB_101bx64\\zconfig\\local_libraries.txt'
+Exception: [Errno 2] No such file or directory: 'F:\\NSCB_101bx64\\zconfig\\remote_libraries.txt'
+Traceback (most recent call last):
+  File "_EEL_\__init__.py", line 305, in _process_message
+  File "lib\Interface.py", line 501, in getfname
+UnicodeEncodeError: 'gbk' codec can't encode character '\u30fb' in position 85: illegal multibyte sequence
+Traceback (most recent call last):
+  File "_EEL_\__init__.py", line 305, in _process_message
+  File "lib\Interface.py", line 501, in getfname
+UnicodeEncodeError: 'gbk' codec can't encode character '\u30fb' in position 85: illegal multibyte sequence
+
+Loaded: E:/BaiduNetdiskDownload/[ÁéÎäÕ½¼Ç ÓÄÁé´¬¶ÓÓëÏûÊ§µÄÓ¢ÐÛ].Phantom Brave The Lost Hero/DLC-UNLOCKER/ v [010064B02243D001][v0].nsp
+* Seeking icon
+Exception: a bytes-like object is required, not 'NoneType'
+* Retrieving Game Information
+* Generating Titles File Data
+* Reading Data from Nacp
+* Reading Data from Npdm
+* Reading Data from Cnmt
+* Verifying files
+    > 33b7eec8e01ec4b9dbd51ecbf6e1a1a6.nca	  -> was MODIFIED
+	* NOT VERIFIABLE!!!
+    > 79df829348e056efb4c5d8d3eecaedf0.cnmt.nca   -> needs RSV check
+	* CHECKING INTERNAL HASHES
+	    - PFS0 hash is CORRECT
+	    - HASH TABLE hash is CORRECT
+	    - HEADER BLOCK hash is CORRECT
+	* INTERNAL HASHES MATCH
+  0%|          | 0.00/37.0 [00:00<?, ?RSV/s]  3%|¨†         | 1.00/37.0 [00:00<00:06, 5.57RSV/s]  5%|¨„         | 2.00/37.0 [00:00<00:06, 5.59RSV/s]  8%|¨‚         | 3.00/37.0 [00:00<00:06, 5.61RSV/s] 11%|¨€         | 4.00/37.0 [00:00<00:05, 5.56RSV/s] 14%|¨€¨†        | 5.00/37.0 [00:00<00:05, 5.49RSV/s] 16%|¨€¨„        | 6.00/37.0 [00:01<00:05, 5.45RSV/s] 19%|¨€¨        | 7.00/37.0 [00:01<00:05, 5.50RSV/s] 22%|¨€¨€¨‡       | 8.00/37.0 [00:01<00:05, 5.55RSV/s] 24%|¨€¨€¨…       | 9.00/37.0 [00:01<00:05, 5.57RSV/s] 27%|¨€¨€¨ƒ       | 10.0/37.0 [00:01<00:04, 5.59RSV/s] 30%|¨€¨€¨       | 11.0/37.0 [00:01<00:04, 5.58RSV/s] 32%|¨€¨€¨€¨‡      | 12.0/37.0 [00:02<00:04, 5.61RSV/s] 35%|¨€¨€¨€¨„      | 13.0/37.0 [00:02<00:04, 5.64RSV/s] 38%|¨€¨€¨€¨‚      | 14.0/37.0 [00:02<00:04, 5.66RSV/s] 41%|¨€¨€¨€¨€      | 15.0/37.0 [00:02<00:03, 5.66RSV/s] 43%|¨€¨€¨€¨€¨†     | 16.0/37.0 [00:02<00:03, 5.67RSV/s] 46%|¨€¨€¨€¨€¨„     | 17.0/37.0 [00:03<00:03, 5.65RSV/s] 49%|¨€¨€¨€¨€¨‚     | 18.0/37.0 [00:03<00:03, 5.67RSV/s] 51%|¨€¨€¨€¨€¨€¨‡    | 19.0/37.0 [00:03<00:03, 5.66RSV/s] 54%|¨€¨€¨€¨€¨€¨…    | 20.0/37.0 [00:03<00:03, 5.64RSV/s] 57%|¨€¨€¨€¨€¨€¨ƒ    | 21.0/37.0 [00:03<00:02, 5.64RSV/s] 59%|¨€¨€¨€¨€¨€¨    | 22.0/37.0 [00:03<00:02, 5.66RSV/s] 62%|¨€¨€¨€¨€¨€¨€¨‡   | 23.0/37.0 [00:04<00:02, 5.67RSV/s] 65%|¨€¨€¨€¨€¨€¨€¨…   | 24.0/37.0 [00:04<00:02, 5.68RSV/s] 68%|¨€¨€¨€¨€¨€¨€¨‚   | 25.0/37.0 [00:04<00:02, 5.65RSV/s] 70%|¨€¨€¨€¨€¨€¨€¨€   | 26.0/37.0 [00:04<00:01, 5.67RSV/s] 73%|¨€¨€¨€¨€¨€¨€¨€¨†  | 27.0/37.0 [00:04<00:01, 5.65RSV/s] 76%|¨€¨€¨€¨€¨€¨€¨€¨„  | 28.0/37.0 [00:04<00:01, 5.65RSV/s] 78%|¨€¨€¨€¨€¨€¨€¨€¨‚  | 29.0/37.0 [00:05<00:01, 5.67RSV/s] 81%|¨€¨€¨€¨€¨€¨€¨€¨€  | 30.0/37.0 [00:05<00:01, 5.66RSV/s] 84%|¨€¨€¨€¨€¨€¨€¨€¨€¨… | 31.0/37.0 [00:05<00:01, 5.69RSV/s] 86%|¨€¨€¨€¨€¨€¨€¨€¨€¨ƒ | 32.0/37.0 [00:05<00:00, 5.62RSV/s] 89%|¨€¨€¨€¨€¨€¨€¨€¨€¨ | 33.0/37.0 [00:05<00:00, 5.51RSV/s] 92%|¨€¨€¨€¨€¨€¨€¨€¨€¨€¨‡| 34.0/37.0 [00:06<00:00, 5.46RSV/s] 95%|¨€¨€¨€¨€¨€¨€¨€¨€¨€¨…| 35.0/37.0 [00:06<00:00, 5.46RSV/s] 97%|¨€¨€¨€¨€¨€¨€¨€¨€¨€¨ƒ| 36.0/37.0 [00:06<00:00, 5.51RSV/s]100%|¨€¨€¨€¨€¨€¨€¨€¨€¨€¨€| 37.0/37.0 [00:06<00:00, 5.49RSV/s]                                                   
+Loaded: Z:/Switch/[Ð¡³óÅÆ].Balatro/Balatro [0100CD801CE5E000] [v393216] (1G+1U).xci
+
+Loaded: Z:/Switch/[Ð¡³óÅÆ].Balatro/Balatro [0100CD801CE5E000] [v393216] (1G+1U).xci
+* Generating BaseID FileTree from DB
+* Seeking cheats from DB
+  DONE
+
+Loaded: Z:/Switch/[Ð¡³óÅÆ].Balatro/Balatro [0100CD801CE5E000] [v393216] (1G+1U).xci
+* Seeking icon
+* Retrieving Game Information
+- Firmware was deleted from file
+
+4E 53 4F 30 00 00 00 00 00 00 00 00 3F 00 00 00 | NSO0........?... |
+01 01 00 00 00 00 00 00 D0 2D 37 00 00 01 00 00 | .........-7..... |
+79 85 23 00 00 30 37 00 E8 A2 18 00 01 00 00 00 | y.#..07......... |
+9C 36 31 00 00 E0 4F 00 08 04 03 00 F8 7B 8A 10 | .61...O......{.. |
+A0 0B BC CA BA 55 55 5E 86 9B 31 88 BD 11 EB 3E | .....UU^..1....> |
+05 1E DE D7 00 00 00 00 00 00 00 00 00 00 00 00 | ................ |
+* Generating Titles File Data
+
+4E 53 4F 30 00 00 00 00 00 00 00 00 3F 00 00 00 | NSO0........?... |
+01 01 00 00 00 00 00 00 D0 2D 37 00 00 01 00 00 | .........-7..... |
+79 85 23 00 00 30 37 00 E8 A2 18 00 01 00 00 00 | y.#..07......... |
+9C 36 31 00 00 E0 4F 00 08 04 03 00 F8 7B 8A 10 | .61...O......{.. |
+A0 0B BC CA BA 55 55 5E 86 9B 31 88 BD 11 EB 3E | .....UU^..1....> |
+05 1E DE D7 00 00 00 00 00 00 00 00 00 00 00 00 | ................ |
+
+4E 53 4F 30 00 00 00 00 00 00 00 00 3F 00 00 00 | NSO0........?... |
+01 01 00 00 00 00 00 00 D0 2D 37 00 00 01 00 00 | .........-7..... |
+79 85 23 00 00 30 37 00 E8 A2 18 00 01 00 00 00 | y.#..07......... |
+9C 36 31 00 00 E0 4F 00 08 04 03 00 F8 7B 8A 10 | .61...O......{.. |
+A0 0B BC CA BA 55 55 5E 86 9B 31 88 BD 11 EB 3E | .....UU^..1....> |
+05 1E DE D7 00 00 00 00 00 00 00 00 00 00 00 00 | ................ |
+* Reading Data from Nacp
+* Reading Data from Npdm
+* Reading Data from Cnmt
+* Verifying files
+    > 0bd22b3824c5a666490fb3b015e3d1d3.nca	  -> is PROPER
+	* TITLERIGHTS WERE REMOVED
+	* Original titlerights id is : 0100CD801CE5E0000000000000000011
+	* Original titlekey is       : 1C1AC125519223F3F4D69C898CF91D54
+    > 9e130a0b1efca4648c60b64400cfe1bf.nca	  -> is PROPER
+    > eaa41bbaef953713ad6e0355aaa5e0e0.nca	  -> is PROPER
+    > 3807138f1b95370687c94d513bdb4414.nca	  -> is PROPER
+	* TITLERIGHTS WERE REMOVED
+	* Original titlerights id is : 0100CD801CE5E8000000000000000011
+	* Original titlekey is       : 0DB9E0D23FC6B23DE9C6BA5C2AE1FD4E
+    > 4c42f3095f971c7c0dd4df465cf38acc.nca	  -> is PROPER
+    > ff1a2be9bfb192c5ec9c85a0a30b8415.nca	  -> is PROPER
+    > 0776d41b5e3c661ccc721da62332c0af.cnmt.nca   -> is PROPER
+    > fbad7efdc23d3b208b274c126f5ecb67.cnmt.nca   -> is PROPER
+* Seeking icon
+* Retrieving Game Information
+- Firmware was deleted from file
+
+4E 53 4F 30 00 00 00 00 00 00 00 00 3F 00 00 00 | NSO0........?... |
+01 01 00 00 00 00 00 00 D0 2D 37 00 00 01 00 00 | .........-7..... |
+79 85 23 00 00 30 37 00 E8 A2 18 00 01 00 00 00 | y.#..07......... |
+9C 36 31 00 00 E0 4F 00 08 04 03 00 F8 7B 8A 10 | .61...O......{.. |
+A0 0B BC CA BA 55 55 5E 86 9B 31 88 BD 11 EB 3E | .....UU^..1....> |
+05 1E DE D7 00 00 00 00 00 00 00 00 00 00 00 00 | ................ |
+* Generating Titles File Data
+
+4E 53 4F 30 00 00 00 00 00 00 00 00 3F 00 00 00 | NSO0........?... |
+01 01 00 00 00 00 00 00 D0 2D 37 00 00 01 00 00 | .........-7..... |
+79 85 23 00 00 30 37 00 E8 A2 18 00 01 00 00 00 | y.#..07......... |
+9C 36 31 00 00 E0 4F 00 08 04 03 00 F8 7B 8A 10 | .61...O......{.. |
+A0 0B BC CA BA 55 55 5E 86 9B 31 88 BD 11 EB 3E | .....UU^..1....> |
+05 1E DE D7 00 00 00 00 00 00 00 00 00 00 00 00 | ................ |
+
+4E 53 4F 30 00 00 00 00 00 00 00 00 3F 00 00 00 | NSO0........?... |
+01 01 00 00 00 00 00 00 D0 2D 37 00 00 01 00 00 | .........-7..... |
+79 85 23 00 00 30 37 00 E8 A2 18 00 01 00 00 00 | y.#..07......... |
+9C 36 31 00 00 E0 4F 00 08 04 03 00 F8 7B 8A 10 | .61...O......{.. |
+A0 0B BC CA BA 55 55 5E 86 9B 31 88 BD 11 EB 3E | .....UU^..1....> |
+05 1E DE D7 00 00 00 00 00 00 00 00 00 00 00 00 | ................ |
+* Reading Data from Nacp
+* Reading Data from Npdm
+* Reading Data from Cnmt
+* Verifying files
+    > 0bd22b3824c5a666490fb3b015e3d1d3.nca	  -> is PROPER
+	* TITLERIGHTS WERE REMOVED
+	* Original titlerights id is : 0100CD801CE5E0000000000000000011
+	* Original titlekey is       : 1C1AC125519223F3F4D69C898CF91D54
+    > 9e130a0b1efca4648c60b64400cfe1bf.nca	  -> is PROPER
+    > eaa41bbaef953713ad6e0355aaa5e0e0.nca	  -> is PROPER
+    > 3807138f1b95370687c94d513bdb4414.nca	  -> is PROPER
+	* TITLERIGHTS WERE REMOVED
+	* Original titlerights id is : 0100CD801CE5E8000000000000000011
+	* Original titlekey is       : 0DB9E0D23FC6B23DE9C6BA5C2AE1FD4E
+    > 4c42f3095f971c7c0dd4df465cf38acc.nca	  -> is PROPER
+    > ff1a2be9bfb192c5ec9c85a0a30b8415.nca	  -> is PROPER
+    > 0776d41b5e3c661ccc721da62332c0af.cnmt.nca   -> is PROPER
+    > fbad7efdc23d3b208b274c126f5ecb67.cnmt.nca   -> is PROPER
+* Seeking icon
+* Retrieving Game Information
+- Firmware was deleted from file
+
+4E 53 4F 30 00 00 00 00 00 00 00 00 3F 00 00 00 | NSO0........?... |
+01 01 00 00 00 00 00 00 D0 2D 37 00 00 01 00 00 | .........-7..... |
+79 85 23 00 00 30 37 00 E8 A2 18 00 01 00 00 00 | y.#..07......... |
+9C 36 31 00 00 E0 4F 00 08 04 03 00 F8 7B 8A 10 | .61...O......{.. |
+A0 0B BC CA BA 55 55 5E 86 9B 31 88 BD 11 EB 3E | .....UU^..1....> |
+05 1E DE D7 00 00 00 00 00 00 00 00 00 00 00 00 | ................ |
+* Generating Titles File Data
+
+4E 53 4F 30 00 00 00 00 00 00 00 00 3F 00 00 00 | NSO0........?... |
+01 01 00 00 00 00 00 00 D0 2D 37 00 00 01 00 00 | .........-7..... |
+79 85 23 00 00 30 37 00 E8 A2 18 00 01 00 00 00 | y.#..07......... |
+9C 36 31 00 00 E0 4F 00 08 04 03 00 F8 7B 8A 10 | .61...O......{.. |
+A0 0B BC CA BA 55 55 5E 86 9B 31 88 BD 11 EB 3E | .....UU^..1....> |
+05 1E DE D7 00 00 00 00 00 00 00 00 00 00 00 00 | ................ |
+
+4E 53 4F 30 00 00 00 00 00 00 00 00 3F 00 00 00 | NSO0........?... |
+01 01 00 00 00 00 00 00 D0 2D 37 00 00 01 00 00 | .........-7..... |
+79 85 23 00 00 30 37 00 E8 A2 18 00 01 00 00 00 | y.#..07......... |
+9C 36 31 00 00 E0 4F 00 08 04 03 00 F8 7B 8A 10 | .61...O......{.. |
+A0 0B BC CA BA 55 55 5E 86 9B 31 88 BD 11 EB 3E | .....UU^..1....> |
+05 1E DE D7 00 00 00 00 00 00 00 00 00 00 00 00 | ................ |
+* Reading Data from Nacp
+* Reading Data from Npdm
+* Reading Data from Cnmt
+* Verifying files
+    > 0bd22b3824c5a666490fb3b015e3d1d3.nca	  -> is PROPER
+	* TITLERIGHTS WERE REMOVED
+	* Original titlerights id is : 0100CD801CE5E0000000000000000011
+	* Original titlekey is       : 1C1AC125519223F3F4D69C898CF91D54
+    > 9e130a0b1efca4648c60b64400cfe1bf.nca	  -> is PROPER
+    > eaa41bbaef953713ad6e0355aaa5e0e0.nca	  -> is PROPER
+    > 3807138f1b95370687c94d513bdb4414.nca	  -> is PROPER
+	* TITLERIGHTS WERE REMOVED
+	* Original titlerights id is : 0100CD801CE5E8000000000000000011
+	* Original titlekey is       : 0DB9E0D23FC6B23DE9C6BA5C2AE1FD4E
+    > 4c42f3095f971c7c0dd4df465cf38acc.nca	  -> is PROPER
+    > ff1a2be9bfb192c5ec9c85a0a30b8415.nca	  -> is PROPER
+    > 0776d41b5e3c661ccc721da62332c0af.cnmt.nca   -> is PROPER
+    > fbad7efdc23d3b208b274c126f5ecb67.cnmt.nca   -> is PROPER
+* Generating BaseID FileTree from DB
+* Seeking cheats from DB
+  DONE
+* Generating BaseID FileTree from DB
+* Seeking cheats from DB
+  DONE
+* Generating BaseID FileTree from DB
+* Seeking cheats from DB
+  DONE
+Traceback (most recent call last):
+  File "_EEL_\__init__.py", line 305, in _process_message
+  File "lib\Interface.py", line 501, in getfname
+UnicodeEncodeError: 'gbk' codec can't encode character '\u30fb' in position 85: illegal multibyte sequence
+User closed the program

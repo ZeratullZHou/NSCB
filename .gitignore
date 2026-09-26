@@ -1,0 +1,28 @@
+# 密钥文件 - 严禁提交（版权敏感）
+keys.txt
+dev_keys.txt
+prod.keys
+*.keys
+ztools/keys.txt
+
+# 运行时产物
+NSCB_output/
+NSCB_temp/
+NSCB_zips/
+lists/
+mlist.txt
+uinput
+*.exe.bak
+
+# 数据库缓存（会自动重新下载）
+zconfig/DB/
+zconfig/credentials/
+zconfig/remote_lib_cache/
+zconfig/sx_autoloader_db/
+
+# Python
+__pycache__/
+*.pyc
+
+# 工具链
+dist/
