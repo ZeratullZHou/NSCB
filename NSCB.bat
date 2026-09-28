@@ -114,7 +114,7 @@ if not exist "%xci_lib%" ( goto missing_things )
 if not exist "%nsp_lib%" ( goto missing_things )
 if not exist "%zip%" ( goto missing_things )
 
-if not exist "%hacbuild%" ( goto missing_things )
+rem if not exist "%hacbuild%" ( goto missing_things ) rem 2.0a: hacbuild 为废弃工具，从未被调用
 if not exist "%listmanager%" ( goto missing_things )
 if not exist "%batconfig%" ( goto missing_things )
 if not exist "%infobat%" ( goto missing_things )
@@ -752,6 +752,7 @@ echo 输入 "7"  合并模式     （文件合并：不常用）
 echo 输入 "8"  压缩和解压   （XCI和XCZ以及NSP和NSZ的互转：常用功能）
 echo 输入 "9"  文件还原     （从备份文件恢复原始包：不常用）
 echo 输入 "10" 文件管理     （功能暂不完善）
+echo 输入 "11" MODBAKE    （把LayeredFS mod整合进本体：新功能）
 echo 输入 "0"  配置选项     （程序配置：常用功能）
 echo.
 echo 输入"D"，进入谷歌网盘模式
@@ -773,6 +774,7 @@ if /i "%bs%"=="7" goto JOINmode
 if /i "%bs%"=="8" goto ZSTDmode
 if /i "%bs%"=="9" goto RSTmode
 if /i "%bs%"=="10" goto MNGmode
+if /i "%bs%"=="11" goto MODBAKEmode
 if /i "%bs%"=="M" goto MTPMode
 if /i "%bs%"=="D" goto DriveMode
 if /i "%bs%"=="L" goto LegacyMode
@@ -796,6 +798,32 @@ goto manual_Reentry
 :MNGmode
 call "%prog_dir%ztools\MNG.bat"
 goto manual_Reentry
+:MODBAKEmode
+call :modbake_flow
+goto manual_Reentry
+:modbake_flow
+echo ------------------------------------
+echo  MODBAKE - 将 LayeredFS mod 整合进本体
+echo  重建为可安装 NSP（安装需大气层 sigpatches 或 SX OS）
+echo ------------------------------------
+set "game="
+set /p game=拖入本体游戏 XCI/NSP 后回车:
+if not defined game goto :eof
+set game=%game:"=%
+set "moddir="
+set /p moddir=拖入 mod 文件夹（含 ExeFs/RomFs）后回车:
+if not defined moddir goto :eof
+set moddir=%moddir:"=%
+set "mbout="
+set /p mbout=输出目录（直接回车 = 游戏同目录 MODBAKE_output）:
+set mbout=%mbout:"=%
+rem MODBAKE 走 2.0a 源码（经典菜单保持打包 exe，互不影响）
+set mbcmd=python "%~dp0tools\py\ztools\squirrel.py" --bake_mod "%game%" --mod_path "%moddir%"
+if defined mbout set mbcmd=%mbcmd% -o "%mbout%"
+if exist "%dec_keys%" set mbcmd=%mbcmd% -k "%dec_keys%"
+%mbcmd%
+echo.
+goto :eof
 :LegacyMode
 call "%prog_dir%ztools\LEGACY.bat"
 goto manual_Reentry

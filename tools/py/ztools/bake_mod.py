@@ -40,19 +40,36 @@ def error(msg):
 	Print.error('Exception: ' + str(msg))
 
 
+def _hbp_safe_line(line):
+	'''True when a keyset line is acceptable to hacbrewpack's strict parser
+	(known 16-byte keys must be exactly 32 hex digits).'''
+	r = re.match(r'\s*([a-zA-Z0-9_]+)\s*=\s*([a-fA-F0-9]+)\s*$', line)
+	if not r:
+		return True
+	name, value = r.group(1), r.group(2)
+	if len(value) == 32 or ('rsa' in name or 'keypair' in name or 'certificate' in name):
+		return True
+	return len(value) in (64, 128, 256, 512)
+
+
 def _hbp_safe(content):
-	'''Heuristic: hacbrewpack rejects known 16-byte keys whose hex value is
-	not exactly 32 digits. Return False if such a line exists.'''
+	'''Heuristic: hacbrewpack rejects keyset files containing malformed
+	entries. Return False if such a line exists.'''
 	for line in content.splitlines():
-		r = re.match(r'\s*([a-zA-Z0-9_]+)\s*=\s*([a-fA-F0-9]+)\s*$', line)
-		if not r:
-			continue
-		name, value = r.group(1), r.group(2)
-		if len(value) == 32 or ('rsa' in name or 'keypair' in name or 'certificate' in name):
-			continue
-		if len(value) not in (64, 128, 256, 512):
+		if not _hbp_safe_line(line):
 			return False
 	return True
+
+
+def _hbp_sanitize(keyset_path, dest_path):
+	'''Write a copy of the keyset with malformed lines removed, for
+	hacbrewpack's strict parser. The copy lives in the temp work folder
+	only; the original external keyset is never modified.'''
+	with open(keyset_path, 'r', encoding='utf-8', errors='ignore') as src, \
+		 open(dest_path, 'w', encoding='utf-8', errors='ignore') as dst:
+		for line in src:
+			if _hbp_safe_line(line.rstrip('\r\n')):
+				dst.write(line)
 
 
 def _find_keyset(explicit):
@@ -406,7 +423,16 @@ def run(args):
 		print('[4/4] hacbrewpack 重建 NSP（需要数分钟）...')
 		tname = _title_name(os.path.join(control_dir, 'control.nacp'))
 		hbp_log = os.path.join(work, 'hacbrewpack.log')
-		cmd = [hbp, '-k', keyset,
+		# hacbrewpack's parser rejects keyset files with malformed entries;
+		# feed it a sanitized temp copy when needed (original stays untouched)
+		hbp_keyset = keyset
+		with open(keyset, 'r', encoding='utf-8', errors='ignore') as f:
+			_keyset_content = f.read()
+		if not _hbp_safe(_keyset_content):
+			hbp_keyset = os.path.join(work, '_hbp_keys.txt')
+			_hbp_sanitize(keyset, hbp_keyset)
+			print('  -> 密钥文件含损坏行，已生成净化副本供 hacbrewpack 使用')
+		cmd = [hbp, '-k', hbp_keyset,
 			   '--exefsdir', exefs_dir,
 			   '--romfsdir', romfs_dir,
 			   '--controldir', control_dir,

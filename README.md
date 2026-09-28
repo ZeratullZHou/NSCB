@@ -7,10 +7,14 @@ NSC_Builder 是一款基于 Nut-FS 库的 Nintendo Switch 文件处理工具，�
 
 把大气层/SXOS 格式的 mod 文件夹（`ExeFs` + `RomFs` 布局）打进本体游戏 dump（XCI/NSP），重建为单个可安装的 NSP，不再需要 SD 卡上的 LayeredFS 挂载。
 
-- **运行**：双击根目录 `NSCB_MODBAKE.bat`，按提示拖入游戏文件与 mod 文件夹；或命令行：
+- **运行**：三种方式任选——
+  1. 双击根目录 **`NSCB.bat`**，选 **`11`（MODBAKE）**，按提示拖入文件（推荐，与经典菜单同一入口）；
+  2. 双击 `NSCB_MODBAKE.bat` 专用启动器；
+  3. 命令行：
   ```
-  ztools\squirrel.py --bake_mod 游戏.xci --mod_path mod文件夹 -o 输出目录 -k 密钥文件
+  python tools\py\ztools\squirrel.py --bake_mod 游戏.xci --mod_path mod文件夹 -o 输出目录
   ```
+  其余菜单功能（合并/转换/拆分等）走原打包程序，行为与 1.01b 完全一致，不受影响。
 - **流程**：解包容器 NCA（原生 pyNCA3 解密）→ 识别 Program/Control/Legal → 覆盖 mod → 调用内置 `hacbrewpack.exe` 重建 NSP。
 - **密钥**：只从外置文件读取（`-k` 显式指定，或自动搜索脚本目录及各级上级目录的 `keys.txt` / `prod.keys`，含仓库根 `ztools\`，以及 `~/.switch`），源码与仓库**永不包含任何密钥**；`hacbrewpack.exe` 为第三方二进制，已加入 `.gitignore`，需自行获取（作者 The-4n，见 `ztools/hacbrewpack_LICENSE`）。
 - **安装**：重建的 NCA 无任天堂签名，需大气层 **sigpatches** + DBI/Tinfoil 安装，或 SX OS；请勿在未破解主机安装、请勿分发成品。
