@@ -394,22 +394,62 @@ def _safe_name(name):
 	return _BAD_CHARS.sub('', name).strip().rstrip('.')
 
 
+def _find_prog_root():
+	'''Locate the program root whose NSCB.bat actually drives this script:
+	the highest ancestor that holds the bat alongside this script's own
+	folder (as tools/py/ztools, ztools_2a or ztools). The repo tree nests
+	a complete upstream deployment under tools/py, so "first match wins"
+	would stop too early — keep the highest instead.'''
+	script_dir = os.path.dirname(os.path.abspath(__file__))
+	best = None
+	folder = script_dir
+	for _ in range(5):
+		if os.path.isfile(os.path.join(folder, 'NSCB.bat')):
+			for rel in (os.path.join('tools', 'py', 'ztools'), 'ztools_2a', 'ztools'):
+				if os.path.normcase(os.path.abspath(os.path.join(folder, rel))) == os.path.normcase(script_dir):
+					best = folder
+					break
+		parent = os.path.dirname(folder)
+		if parent == folder:
+			break
+		folder = parent
+	return best
+
+
+def _ascii_dir_candidates(outdir, game):
+	for d in (os.path.dirname(outdir), os.path.dirname(game),
+			  tempfile.gettempdir(), os.path.dirname(os.path.abspath(__file__)),
+			  os.path.expandvars('%ProgramData%')):
+		if d and os.path.isdir(d) and os.path.join(d, 'x').isascii():
+			yield d
+
+
 def _make_work_dir(outdir, game):
-	'''Temp work dir for every intermediate. Prefers an existing folder on
-	the same volume as the output dir (the finished NSP is then moved in by
-	a rename), falls back to the game's folder (same drive, and known to
-	have room for the game itself) and finally to the system temp folder;
-	it never lives inside outdir itself, so the output dir only ever
-	receives the final file.'''
-	last_err = None
+	'''Temp work dir for every intermediate, anchored at the first
+	ASCII-safe location: hacbrewpack converts every path it is handed
+	(keyset, exefsdir, romfsdir, ...) to UTF-16 assuming UTF-8, so a
+	system-codepage (GBK) work dir kills the rebuild with "Failed to
+	convert ... to UTF-16". Prefer the output dir's volume (the finished
+	NSP is then moved in by rename), then the game's volume, system temp,
+	the script dir and finally ProgramData. It never lives inside outdir
+	itself, so the output dir only ever receives the final file.'''
+	for root in _ascii_dir_candidates(outdir, game):
+		try:
+			return tempfile.mkdtemp(prefix='_modbake_', dir=root)
+		except OSError:
+			continue
+	# nothing ASCII worked; same-volume chain as a last resort (extraction
+	# still runs, but hacbrewpack may refuse the non-ASCII paths)
 	for root in (os.path.dirname(outdir), os.path.dirname(game), None):
 		if root is not None and not os.path.isdir(root):
 			continue
 		try:
-			return tempfile.mkdtemp(prefix='_modbake_', dir=root)
-		except OSError as e:
-			last_err = e
-	raise last_err
+			work = tempfile.mkdtemp(prefix='_modbake_', dir=root)
+			Print.warning('MODBAKE: 未找到纯 ASCII 的临时目录，使用 %s（hacbrewpack 可能拒绝中文路径）' % work)
+			return work
+		except OSError:
+			continue
+	raise OSError('MODBAKE: could not create a temp work dir')
 
 
 def run(args):
@@ -474,7 +514,14 @@ def run(args):
 		Print.error('MODBAKE: hacbrewpack.exe not found next to squirrel (expected %s)' % hbp)
 		sys.exit(1)
 
-	outdir = args.ofolder[0] if args.ofolder else os.path.join(os.path.dirname(os.path.abspath(game)), 'MODBAKE_output')
+	if args.ofolder:
+		outdir = args.ofolder[0]
+	else:
+		# default to the tool's own NSCB_output folder; game-adjacent
+		# fallback when the program root can't be located
+		root = _find_prog_root()
+		outdir = os.path.join(root, 'NSCB_output') if root else \
+			os.path.join(os.path.dirname(os.path.abspath(game)), 'MODBAKE_output')
 	outdir = os.path.abspath(outdir)
 	# All intermediates (extracted NCAs, hacbrewpack build/temp, logs,
 	# sanitized keyset, the raw built NSP) stay in the temp work dir;
@@ -583,7 +630,10 @@ def run(args):
 				tail = f.read()[-2000:]
 			print(tail)
 			try:
-				shutil.copyfile(hbp_log, diag_log)
+				with open(diag_log, 'w', encoding='utf-8') as df:
+					df.write('game:   %s\nmod:    %s\noutdir: %s\n\n' % (game, moddir, outdir))
+					with open(hbp_log, 'r', encoding='utf-8', errors='ignore') as lf:
+						df.write(lf.read())
 				Print.error('MODBAKE: hacbrewpack failed (exit %d), full log saved to: %s' % (ret, diag_log))
 			except OSError:
 				Print.error('MODBAKE: hacbrewpack failed (exit %d), log: %s' % (ret, hbp_log))

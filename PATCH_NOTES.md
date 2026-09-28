@@ -1,3 +1,27 @@
+# NSCB 2.0a 更新说明（2026-09-28 其四）：ASCII 路径全链路 + 默认输出 NSCB_output
+
+其二/其三修复后的用户实测又暴露两处问题，本轮全部解决：
+
+- **hacbrewpack 的非 ASCII 过敏不止密钥文件**：exefsdir/romfsdir 等
+  所有路径参数都会触发同样的 `Failed to convert ... to UTF-16!`。
+  整个临时工作目录改为**纯 ASCII 锚定链**：输出目录同盘 → 游戏同盘 →
+  `%TEMP%` → 脚本目录 → `%ProgramData%`，逐级要求路径不含非 ASCII
+  字符；全部不可用时才回退同盘目录并给出明确警告。
+- **默认输出改为工具根的 `NSCB_output`**：`bake_mod` 自动向上定位真正
+  驱动本脚本的 NSCB.bat 所在根（兼容仓库树 / `ztools_2a` / 部署
+  `ztools` 布局；注意 `tools/py` 内嵌了一份上游遗留 NSCB.bat，故取
+  **最高**合格祖先而非首个）。菜单与启动器提示语同步更新。
+- **报错后黑底问题**：python 侧第三方库会重置控制台颜色属性，菜单在
+  整合MOD 结束后与每次重绘前恢复蓝底（`COLOR 1F`），报错信息自始至
+  终蓝底白字。
+- hacbrewpack 失败的诊断日志现在附带 game/mod/outdir 上下文头。
+
+**真实验收**：完全复现用户操作（默认输出、不带 `-o`）→ EXIT=0，成品
+落 `NSCB_output\01001ed0075ee000 (MOD).nsp`，临时目录零残留；NSCB.bat
+管道烟雾测试（菜单/版本号/整合MOD 渲染正常）。
+
+---
+
 # NSCB 2.0a 更新说明（2026-09-28 其三）：真实用例驱动的构建修复
 
 以「死印 死印 Spirit Hunter ~Death Mark~」（1G+1U+3D 合并 XCI + 汉化

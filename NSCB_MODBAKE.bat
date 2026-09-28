@@ -53,7 +53,7 @@ if not defined moddir exit /b 0
 set "moddir=%moddir:"=%"
 
 set "outdir="
-set /p outdir=输出目录（直接回车 = 游戏同目录 MODBAKE_output）:
+set /p outdir=输出目录（直接回车 = NSCB_output）:
 if defined outdir set "outdir=%outdir:"=%"
 
 set cmd=python squirrel.py --bake_mod "%game%" --mod_path "%moddir%"
@@ -64,5 +64,6 @@ if not exist "%prog_dir%prod.keys" if not exist "%zt%\keys.txt" if exist "%prog_
 
 echo.
 %cmd%
+COLOR 1F
 echo.
 PAUSE

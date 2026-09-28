@@ -739,6 +739,7 @@ if "%manual_intro%" EQU "split" ( goto SPLMODE )
 goto manual_Reentry
 
 :manual_Reentry
+COLOR 1F
 cls
 if "%NSBMODE%" EQU "legacy" call "%prog_dir%ztools\LEGACY.bat"
 call :program_logo
@@ -816,7 +817,7 @@ set /p moddir=拖入 mod 文件夹（含 ExeFs/RomFs）后回车:
 if not defined moddir goto :eof
 set moddir=%moddir:"=%
 set "mbout="
-set /p mbout=输出目录（直接回车 = 游戏同目录 MODBAKE_output）:
+set /p mbout=输出目录（直接回车 = NSCB_output）:
 if defined mbout set mbout=%mbout:"=%
 rem MODBAKE 走 2.0a 源码（经典菜单保持打包 exe，互不影响）
 set mbcmd=python "%~dp0tools\py\ztools\squirrel.py" --bake_mod "%game%" --mod_path "%moddir%"
@@ -829,6 +830,7 @@ if errorlevel 1 (
 	goto :eof
 )
 %mbcmd%
+COLOR 1F
 echo.
 echo  整合MOD 已结束（如上方有报错，详细日志见 %TEMP%\MODBAKE_last_error.log）
 echo  按任意键返回主菜单...
