@@ -1,7 +1,20 @@
-# NSC_Builder 1.01b（修复版）
+# NSC_Builder 2.0a（修复 + MODBAKE 增强版）
 
-基于 [JulesOnTheRoad/NSC_BUILDER](https://github.com/julesontheroad/NSC_BUILDER) v1.01b 的修复分支。
+基于 [JulesOnTheRoad/NSC_BUILDER](https://github.com/julesontheroad/NSC_BUILDER) v1.01b 的修复与增强分支。
 NSC_Builder 是一款基于 Nut-FS 库的 Nintendo Switch 文件处理工具，支持 NSP/XCI/NSZ 的合并、转换、拆分、重命名等操作（图形界面 + 批处理）。
+
+## 2.0a 新增：MODBAKE —— 把 LayeredFS mod 整合进游戏本体
+
+把大气层/SXOS 格式的 mod 文件夹（`ExeFs` + `RomFs` 布局）打进本体游戏 dump（XCI/NSP），重建为单个可安装的 NSP，不再需要 SD 卡上的 LayeredFS 挂载。
+
+- **运行**：双击根目录 `NSCB_MODBAKE.bat`，按提示拖入游戏文件与 mod 文件夹；或命令行：
+  ```
+  ztools\squirrel.py --bake_mod 游戏.xci --mod_path mod文件夹 -o 输出目录 -k 密钥文件
+  ```
+- **流程**：解包容器 NCA（原生 pyNCA3 解密）→ 识别 Program/Control/Legal → 覆盖 mod → 调用内置 `hacbrewpack.exe` 重建 NSP。
+- **密钥**：只从外置文件读取（`-k` 显式指定，或自动搜索 `keys.txt` / `prod.keys` / `~/.switch`），源码与仓库**永不包含任何密钥**；`hacbrewpack.exe` 为第三方二进制，已加入 `.gitignore`，需自行获取（作者 The-4n，见 `ztools/hacbrewpack_LICENSE`）。
+- **安装**：重建的 NCA 无任天堂签名，需大气层 **sigpatches** + DBI/Tinfoil 安装，或 SX OS；请勿在未破解主机安装、请勿分发成品。
+- **限制**：仅支持标准加密（gamecard/标准 crypto）dump；mod 的 `ExeFs\main` 与游戏版本需匹配。
 
 ## 本分支修复了什么
 
@@ -43,6 +56,8 @@ NSC_Builder 是一款基于 Nut-FS 库的 Nintendo Switch 文件处理工具，�
 | `ztools/squirrel.exe`（二进制） | 内嵌 PYZ 中 `Keys` 模块同步修复 |
 | `ztools/squirrel_lib_call.exe`（二进制） | 同上 |
 | `ztools/redsquirrel.exe`（二进制） | 同上 |
+| `tools/py/ztools/bake_mod.py`、`squirrel.py`、`lib/NXKeys.py`、`Fs/pyNCA3.py`（2.0a） | 新增 MODBAKE 模式与配套密钥加载健壮性修复（详见 PATCH_NOTES.md） |
+| `NSCB_MODBAKE.bat`（2.0a） | MODBAKE 交互式启动器 |
 
 其余内容与官方 v1.01b 发行包一致（密钥文件除外，本仓库永远不包含）。
 

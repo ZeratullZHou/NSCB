@@ -5,6 +5,9 @@ prod.keys
 *.keys
 ztools/keys.txt
 
+# 第三方二进制 - 严禁提交（重分发风险，见 README 获取方式）
+hacbrewpack.exe
+
 # 运行时产物
 NSCB_output/
 NSCB_temp/
@@ -19,6 +22,10 @@ zconfig/DB/
 zconfig/credentials/
 zconfig/remote_lib_cache/
 zconfig/sx_autoloader_db/
+tools/py/zconfig/DB/
+tools/py/zconfig/credentials/
+tools/py/zconfig/remote_lib_cache/
+tools/py/zconfig/sx_autoloader_db/
 
 # Python
 __pycache__/

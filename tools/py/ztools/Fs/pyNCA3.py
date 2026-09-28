@@ -119,10 +119,12 @@ class NCAHeader:
 
 class NCA3:
 	'''Class for manipulating NCA3 files'''
+	# .get() so the module imports cleanly even when no keyset file was
+	# found at startup; modes that decrypt will surface a clear key error.
 	kaeks = {
-		0: keys['key_area_key_application_source'],
-		1: keys['key_area_key_ocean_source'],
-		2: keys['key_area_key_system_source']
+		0: keys.get('key_area_key_application_source'),
+		1: keys.get('key_area_key_ocean_source'),
+		2: keys.get('key_area_key_system_source')
 	}
 	def __init__(self, fp,ifo=0,name='nca',titlekey=None,buffer=65536,verify=False):
 		# print(str(fp))

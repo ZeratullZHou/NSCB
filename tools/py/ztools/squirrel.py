@@ -124,6 +124,12 @@ if __name__ == '__main__':
 		parser.add_argument('--nsp_htrights', nargs='+', help='Returns true if nsp has titlerights')
 		parser.add_argument('--nsp_hticket', nargs='+', help='Returns true if nsp has ticket')
 
+		# MODBAKE (2.0a): integrate a LayeredFS mod into a base dump and rebuild an installable NSP
+		parser.add_argument('--bake_mod', nargs='+', help='[2.0a] Bake a LayeredFS mod into a base XCI/NSP and rebuild an installable NSP. Usage: --bake_mod game.xci --mod_path <folder with ExeFs/RomFs>')
+		parser.add_argument('--mod_path', nargs='+', help='[2.0a] Mod folder containing ExeFs and RomFs (any case)')
+		parser.add_argument('-k', '--keyset', nargs='+', help='[2.0a] Keyset file for MODBAKE (defaults to keys.txt / prod.keys autodetect)')
+		parser.add_argument('--keep_temp', action='store_true', help='[2.0a] Keep MODBAKE temp folder after building')
+
 		# Remove titlerights functions
 		parser.add_argument('--remove-title-rights', nargs='+', help='Removes title rights encryption from all NCA\'s in the NSP.')
 		parser.add_argument('--RTRNCA_h_nsp', nargs='+', help='Removes title rights encryption from a single nca reading from original nsp')
@@ -290,10 +296,20 @@ if __name__ == '__main__':
 				sq_settings.set_dev_environment()
 				reload(Keys)
 				
+		# MODBAKE (2.0a): register an explicit external keyset before the
+		# sq_tools/Fs/pyNCA3 import chain instantiates its keyset.
+		# Key material is only ever loaded from external files.
+		try:
+			import NXKeys as _nxkeys
+			if args.keyset:
+				_nxkeys.explicit_keyset = args.keyset[0]
+		except ImportError:
+			pass
+
 		import sq_tools
 		import listmanager
 		import Titles
-		import Fs	
+		import Fs
 		import Print
 		import Nsps
 		import DBmodule as dbmodule
@@ -10013,9 +10029,21 @@ if __name__ == '__main__':
 						else:
 							print("\nFILE WASN'T MODIFIED. SKIPPING RESTORATION")
 					elif verdict == False:		
-						print("\nFILE WAS MODIFIED. FILE ISN'T RESTORABLE")					
+						print("\nFILE WAS MODIFIED. FILE ISN'T RESTORABLE")
 				except BaseException as e:
-					Print.error('Exception: ' + str(e))			
+					Print.error('Exception: ' + str(e))
+
+		# ......................................................................
+		# MODBAKE (2.0a). LayeredFS mod -> baked into base dump -> installable NSP
+		# ......................................................................
+		if args.bake_mod:
+			try:
+				import bake_mod
+				bake_mod.run(args)
+			except SystemExit:
+				raise
+			except BaseException as e:
+				Print.error('Exception: ' + str(e))
 
 		Status.close()
 

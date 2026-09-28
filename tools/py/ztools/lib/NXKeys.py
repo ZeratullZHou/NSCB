@@ -3,7 +3,11 @@ import re
 from binascii import hexlify as hx, unhexlify as uhx
 from pathlib import Path
 my_file = Path('keys.txt')
-my_file2 = Path('ztools\\keys.txt')	
+my_file2 = Path('ztools\\keys.txt')
+
+# Optional explicit keyset path (external file only, never embedded).
+# MODBAKE sets this from the -k/--keyset argument before importing pyNCA3.
+explicit_keyset = None
 
 class Keys(dict):
 	def __init__(self, keys_type):
@@ -11,17 +15,26 @@ class Keys(dict):
 		is_key  = re.compile(r'''\s*([a-zA-Z0-9_]*)\s* # name
 								=
 								\s*([a-fA-F0-9]*)\s* # key''', re.X)
-		try:
-			if my_file.is_file():
-				f = open('keys.txt', 'r')
-			if my_file2.is_file():
-				f = open('ztools\\keys.txt', 'r')
-		except FileNotFoundError:
-			try:
-				f = open(path.join(path.dirname(path.abspath(__file__)), '%s' % self.keys_type), 'r')
-			except FileNotFoundError:
-				raise FileNotFoundError('Need key file %s.keys in either %s or %s' % (self.keys_type, 
-					path.expanduser('~/.switch'), path.dirname(path.abspath(__file__))))
+		# All key sources are external files; nothing is hardcoded here.
+		candidates = []
+		if explicit_keyset:
+			candidates.append(explicit_keyset)
+		candidates += ['keys.txt', 'ztools\\keys.txt',
+				path.join(path.dirname(path.abspath(__file__)), 'keys.txt'),
+				path.join(path.expanduser('~'), '.switch', 'keys.txt'),
+				path.join(path.expanduser('~'), '.switch', 'prod.keys')]
+		f = None
+		for candidate in candidates:
+			if candidate and path.isfile(candidate):
+				f = open(candidate, 'r')
+				break
+		if f is None:
+			# Non-fatal: allow the interpreter to start without keys
+			# (modes that actually need keys will fail later with a
+			# clear 'Missing key' message). Keys are external files only.
+			print('NXKeys: no keyset file found (searched: %s)' % ', '.join(candidates))
+			super(Keys, self).__init__()
+			return
 		iterator = (re.search(is_key, l) for l in f)
 		super(Keys, self).__init__({r[1]: uhx(r[2]) for r in iterator if r is not None})
 		f.close()
