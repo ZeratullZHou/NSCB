@@ -25,6 +25,7 @@ import sys
 import glob
 import shutil
 import tempfile
+import traceback
 import subprocess
 from binascii import unhexlify
 
@@ -300,13 +301,17 @@ def _safe_name(name):
 	return _BAD_CHARS.sub('', name).strip().rstrip('.')
 
 
-def _make_work_dir(outdir):
-	'''Temp work dir for every intermediate. Prefers the same volume as the
-	output dir (the finished NSP is then moved in by a rename) and falls
-	back to the system temp folder; it never lives inside outdir itself,
-	so the output dir only ever receives the final file.'''
+def _make_work_dir(outdir, game):
+	'''Temp work dir for every intermediate. Prefers an existing folder on
+	the same volume as the output dir (the finished NSP is then moved in by
+	a rename), falls back to the game's folder (same drive, and known to
+	have room for the game itself) and finally to the system temp folder;
+	it never lives inside outdir itself, so the output dir only ever
+	receives the final file.'''
 	last_err = None
-	for root in (os.path.dirname(outdir), None):
+	for root in (os.path.dirname(outdir), os.path.dirname(game), None):
+		if root is not None and not os.path.isdir(root):
+			continue
 		try:
 			return tempfile.mkdtemp(prefix='_modbake_', dir=root)
 		except OSError as e:
@@ -317,6 +322,13 @@ def _make_work_dir(outdir):
 def run(args):
 	if not args.bake_mod:
 		return
+	# Never let an unencodable path/ name kill the run on a redirected or
+	# legacy-codepage console; replace instead.
+	try:
+		sys.stdout.reconfigure(errors='replace')
+		sys.stderr.reconfigure(errors='replace')
+	except BaseException:
+		pass
 	game = args.bake_mod[0]
 	if len(args.bake_mod) > 1 and not args.mod_path:
 		args.mod_path = [args.bake_mod[1]]
@@ -375,7 +387,12 @@ def run(args):
 	# sanitized keyset, the raw built NSP) stay in the temp work dir;
 	# outdir is only created when the finished NSP is moved in, so a
 	# failed run leaves no trace in the output location.
-	work = _make_work_dir(outdir)
+	work = _make_work_dir(outdir, game)
+	# Persistent diagnostics: the temp work dir (incl. the hacbrewpack
+	# log) is wiped on failure, so keep the evidence where the menu's cls
+	# cannot reach it and the user can inspect it after the fact.
+	diag_log = os.path.join(tempfile.gettempdir(), 'MODBAKE_last_error.log')
+	hbp_log = os.path.join(work, 'hacbrewpack.log')
 
 	print('**************************************************************************')
 	print('                     NSC_Builder 2.0a -- MODBAKE                          ')
@@ -436,7 +453,6 @@ def run(args):
 		# ---- 4. Rebuild with hacbrewpack ------------------------------------
 		print('[4/4] hacbrewpack 重建 NSP（需要数分钟）...')
 		tname = _title_name(os.path.join(control_dir, 'control.nacp'))
-		hbp_log = os.path.join(work, 'hacbrewpack.log')
 		# hacbrewpack's parser rejects keyset files with malformed entries;
 		# feed it a sanitized temp copy when needed (original stays untouched)
 		hbp_keyset = keyset
@@ -471,7 +487,11 @@ def run(args):
 			with open(hbp_log, 'r', encoding='utf-8', errors='ignore') as f:
 				tail = f.read()[-2000:]
 			print(tail)
-			Print.error('MODBAKE: hacbrewpack failed (exit %d), log: %s' % (ret, hbp_log))
+			try:
+				shutil.copyfile(hbp_log, diag_log)
+				Print.error('MODBAKE: hacbrewpack failed (exit %d), full log saved to: %s' % (ret, diag_log))
+			except OSError:
+				Print.error('MODBAKE: hacbrewpack failed (exit %d), log: %s' % (ret, hbp_log))
 			sys.exit(1)
 
 		built = sorted(glob.glob(os.path.join(build_dir, '%s*.nsp' % titleid)), key=os.path.getmtime)
@@ -500,6 +520,19 @@ def run(args):
 		print('**************************************************************************')
 	except BaseException as e:
 		error(e)
+		# The menu cls-wipes the console right after this returns; persist
+		# the traceback (and the hacbrewpack log tail) for post-mortem.
+		try:
+			with open(diag_log, 'w', encoding='utf-8') as df:
+				df.write('game:   %s\nmod:    %s\noutdir: %s\n\n' % (game, moddir, outdir))
+				traceback.print_exc(file=df)
+				if os.path.isfile(hbp_log):
+					df.write('\n--- hacbrewpack log tail ---\n')
+					with open(hbp_log, 'r', encoding='utf-8', errors='ignore') as lf:
+						df.write(lf.read()[-4000:])
+			print('MODBAKE: 错误详情已写入 %s' % diag_log)
+		except OSError:
+			pass
 		if args.keep_temp and os.path.isdir(work):
 			print('MODBAKE: temp kept for diagnosis at %s' % work)
 		sys.exit(1)

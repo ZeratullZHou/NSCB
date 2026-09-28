@@ -1,4 +1,5 @@
 @ECHO OFF
+COLOR 1F
 :TOP_INIT
 set "prog_dir=%~dp0"
 set "bat_name=%~n0"
@@ -821,8 +822,17 @@ rem MODBAKE 走 2.0a 源码（经典菜单保持打包 exe，互不影响）
 set mbcmd=python "%~dp0tools\py\ztools\squirrel.py" --bake_mod "%game%" --mod_path "%moddir%"
 if defined mbout set mbcmd=%mbcmd% -o "%mbout%"
 if exist "%dec_keys%" set mbcmd=%mbcmd% -k "%dec_keys%"
+where python >nul 2>&1
+if errorlevel 1 (
+	echo [!] 未找到 python：整合MOD 需要 Python 3.7+ 及依赖，请先运行 tools\py\install_dependencies.bat
+	pause
+	goto :eof
+)
 %mbcmd%
 echo.
+echo  整合MOD 已结束（如上方有报错，详细日志见 %TEMP%\MODBAKE_last_error.log）
+echo  按任意键返回主菜单...
+pause >NUL
 goto :eof
 :LegacyMode
 call "%prog_dir%ztools\LEGACY.bat"
@@ -3025,7 +3035,7 @@ ECHO =============================     BY JULESONTHEROAD     ===================
 ECHO -------------------------------------------------------------------------------------
 ECHO "                                POWERED BY SQUIRREL                                "
 ECHO "                    BASED ON THE WORK OF BLAWAR AND LUCA FRAGA                     "
-ECHO                                  VERSION 1.01 (NEW)
+ECHO                            VERSION 2.0a (FIX + MODBAKE)
 ECHO -------------------------------------------------------------------------------------
 ECHO Program's github: https://github.com/julesontheroad/NSC_BUILDER
 ECHO Blawar's github:  https://github.com/blawar

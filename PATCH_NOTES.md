@@ -24,6 +24,17 @@
 - 失败或中断时输出目录根本不会被创建，无任何残留；临时目录默认随
   `finally` 清理，`--keep_temp` 可保留供诊断。
 
+## 失败可见性与界面修复
+
+- **报错不再被清屏吞掉**：菜单执行完整合MOD 后暂停（pause），错误与
+  完成信息在按键前始终可见；启动前检查 `python` 是否可用。
+- **错误持久化**：任何异常的回溯栈（含 game/mod/outdir 上下文与
+  hacbrewpack 日志尾部）自动写入 `%TEMP%\MODBAKE_last_error.log`，
+  临时工作目录被清理后仍可排查。
+- **界面**：主菜单恢复蓝底白字（`COLOR 1F`，与上游一致）；logo 版本
+  由 `VERSION 1.01 (NEW)` 更正为 `VERSION 2.0a (FIX + MODBAKE)`；
+  `NSCB_MODBAKE.bat` 同步蓝底。
+
 ## 已验证
 
 - `_make_work_dir` 三场景单测通过：输出目录同盘 / 不存在的盘符回退

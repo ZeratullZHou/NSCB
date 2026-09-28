@@ -1,4 +1,5 @@
 @ECHO OFF
+COLOR 1F
 rem NSC_Builder 2.0a MODBAKE 启动器
 rem 把 LayeredFS mod（ExeFs/RomFs 文件夹）打进游戏本体，重建为可安装的 NSP
 Title NSC_Builder v2.0a -- MODBAKE
