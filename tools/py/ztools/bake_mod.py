@@ -416,12 +416,21 @@ def _find_prog_root():
 	return best
 
 
-def _ascii_dir_candidates(outdir, game):
-	for d in (os.path.dirname(outdir), os.path.dirname(game),
-			  tempfile.gettempdir(), os.path.dirname(os.path.abspath(__file__)),
-			  os.path.expandvars('%ProgramData%')):
-		if d and os.path.isdir(d) and os.path.join(d, 'x').isascii():
-			yield d
+def _sweep_stale_workdirs(root, age_hours=24):
+	'''Best-effort cleanup of work dirs left behind by hard-killed runs
+	(e.g. a closed console window skips the finally block): only entries
+	older than a day are removed, so concurrent bakes are never touched.'''
+	import time
+	try:
+		now = time.time()
+		for name in os.listdir(root):
+			if not name.startswith('_modbake_'):
+				continue
+			p = os.path.join(root, name)
+			if os.path.isdir(p) and now - os.path.getmtime(p) > age_hours * 3600:
+				shutil.rmtree(p, ignore_errors=True)
+	except OSError:
+		pass
 
 
 def _make_work_dir(outdir, game):
@@ -429,15 +438,37 @@ def _make_work_dir(outdir, game):
 	ASCII-safe location: hacbrewpack converts every path it is handed
 	(keyset, exefsdir, romfsdir, ...) to UTF-16 assuming UTF-8, so a
 	system-codepage (GBK) work dir kills the rebuild with "Failed to
-	convert ... to UTF-16". Prefer the output dir's volume (the finished
-	NSP is then moved in by rename), then the game's volume, system temp,
-	the script dir and finally ProgramData. It never lives inside outdir
-	itself, so the output dir only ever receives the final file.'''
-	for root in _ascii_dir_candidates(outdir, game):
+	convert ... to UTF-16". The conventional system temp folder comes
+	first (invisible to the user; stale dirs get OS-cleaned eventually),
+	gated by a free-space check, then the output/game volumes for the
+	same-volume rename, then ProgramData and the script dir. It never
+	lives inside outdir itself, so the output dir only ever receives the
+	final file.'''
+	cands = []
+	t = tempfile.gettempdir()
+	if t and os.path.isdir(t) and os.path.join(t, 'x').isascii():
 		try:
-			return tempfile.mkdtemp(prefix='_modbake_', dir=root)
+			game_size = os.path.getsize(game)
+		except OSError:
+			game_size = 0
+		try:
+			# extraction + rebuild needs roughly 2.5x the game size
+			if shutil.disk_usage(t).free > game_size * 2.5 + (1 << 30):
+				cands.append(t)
+		except OSError:
+			pass
+	for d in (os.path.dirname(outdir), os.path.dirname(game),
+			  os.path.expandvars('%ProgramData%'),
+			  os.path.dirname(os.path.abspath(__file__))):
+		if d and os.path.isdir(d) and os.path.join(d, 'x').isascii():
+			cands.append(d)
+	for root in cands:
+		try:
+			work = tempfile.mkdtemp(prefix='_modbake_', dir=root)
 		except OSError:
 			continue
+		_sweep_stale_workdirs(root)
+		return work
 	# nothing ASCII worked; same-volume chain as a last resort (extraction
 	# still runs, but hacbrewpack may refuse the non-ASCII paths)
 	for root in (os.path.dirname(outdir), os.path.dirname(game), None):
