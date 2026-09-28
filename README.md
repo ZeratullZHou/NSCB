@@ -8,14 +8,16 @@ NSC_Builder 是一款基于 Nut-FS 库的 Nintendo Switch 文件处理工具，�
 把大气层/SXOS 格式的 mod 文件夹（`ExeFs` + `RomFs` 布局）打进本体游戏 dump（XCI/NSP），重建为单个可安装的 NSP，不再需要 SD 卡上的 LayeredFS 挂载。
 
 - **运行**：三种方式任选——
-  1. 双击根目录 **`NSCB.bat`**，选 **`11`（MODBAKE）**，按提示拖入文件（推荐，与经典菜单同一入口）；
+  1. 双击根目录 **`NSCB.bat`**，选 **`11`（整合MOD）**，按提示拖入文件（推荐，与经典菜单同一入口）；
   2. 双击 `NSCB_MODBAKE.bat` 专用启动器；
   3. 命令行：
   ```
   python tools\py\ztools\squirrel.py --bake_mod 游戏.xci --mod_path mod文件夹 -o 输出目录
   ```
   其余菜单功能（合并/转换/拆分等）走原打包程序，行为与 1.01b 完全一致，不受影响。
+  整合MOD 基于 Python 源码运行，需要本机安装 Python 3.7+ 及依赖（双击 `tools\py\install_dependencies.bat` 一键安装）；经典菜单功能为独立打包 exe，无需 Python。
 - **流程**：解包容器 NCA（原生 pyNCA3 解密）→ 识别 Program/Control/Legal → 覆盖 mod → 调用内置 `hacbrewpack.exe` 重建 NSP。
+- **产物**：所有过程产物（解包 NCA、hacbrewpack 构建缓存、日志、密钥净化副本、中间 NSP）都写入临时工作目录（优先与输出目录同盘，回退系统 `%TEMP%`），结束后自动清理；**输出目录仅在构建成功时创建，且只保留一个成品** `名称 [TitleID] (MOD).nsp`，失败/中断不产生任何残留。调试时可加 `--keep_temp` 保留临时目录。
 - **密钥**：只从外置文件读取（`-k` 显式指定，或自动搜索脚本目录及各级上级目录的 `keys.txt` / `prod.keys`，含仓库根 `ztools\`，以及 `~/.switch`），源码与仓库**永不包含任何密钥**；`hacbrewpack.exe` 为第三方二进制，已加入 `.gitignore`，需自行获取（作者 The-4n，见 `ztools/hacbrewpack_LICENSE`）。
 - **安装**：重建的 NCA 无任天堂签名，需大气层 **sigpatches** + DBI/Tinfoil 安装，或 SX OS；请勿在未破解主机安装、请勿分发成品。
 - **限制**：仅支持标准加密（gamecard/标准 crypto）dump；mod 的 `ExeFs\main` 与游戏版本需匹配。
@@ -61,6 +63,7 @@ NSC_Builder 是一款基于 Nut-FS 库的 Nintendo Switch 文件处理工具，�
 | `ztools/squirrel_lib_call.exe`（二进制） | 同上 |
 | `ztools/redsquirrel.exe`（二进制） | 同上 |
 | `tools/py/ztools/bake_mod.py`、`squirrel.py`、`lib/NXKeys.py`、`Fs/pyNCA3.py`（2.0a） | 新增 MODBAKE 模式与配套密钥加载健壮性修复（详见 PATCH_NOTES.md） |
+| `NSCB.bat`（2.0a） | 主菜单新增选项 11「整合MOD」入口（走 2.0a 源码，其余菜单仍走打包 exe） |
 | `NSCB_MODBAKE.bat`（2.0a） | MODBAKE 交互式启动器 |
 
 其余内容与官方 v1.01b 发行包一致（密钥文件除外，本仓库永远不包含）。

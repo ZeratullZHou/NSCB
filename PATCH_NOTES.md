@@ -1,3 +1,39 @@
+# NSCB 2.0a 更新说明（2026-09-28 其二）：整合MOD 菜单接入 + 产物目录隔离
+
+## 主菜单接入（NSCB.bat 选项 11「整合MOD」）
+
+- 主菜单新增选项 11「整合MOD」：交互式拖入本体游戏（XCI/NSP）与 mod
+  文件夹，走 2.0a 源码（`tools\py\ztools\squirrel.py --bake_mod`）重建
+  NSP，处理完返回主菜单；经典功能仍走原打包 exe，互不影响。
+- 密钥净化副本机制：hacbrewpack 严格解析拒绝损坏密钥行（如 34 位十六
+  进制的 mariko 密钥）时，自动在临时目录生成剔除坏行的副本供其使用，
+  原 keys.txt 不动。
+- 发布包布局适配：`NSCB_MODBAKE.bat` 自动适配仓库源码
+  （`tools\py\ztools`）与部署布局（`ztools_2a` / `ztools`）；Release
+  zip 已包含 2.0a 源码运行时，选项 11 与专用启动器开箱即用（需
+  Python 3.7+，`tools\py\install_dependencies.bat` 一键装依赖）。
+
+## 产物目录隔离（输出目录只保留成品）
+
+- 所有过程产物——解包 NCA、hacbrewpack 的 nca_build/temp、日志、密钥
+  净化副本、hacbrewpack 直接产出的中间 NSP——统一写入临时工作目录
+  `_modbake_xxxx`：优先创建在输出目录同盘（成品移入为瞬间改名），父
+  目录不可写/不存在时回退系统 `%TEMP%`；不会建在输出目录内部。
+- hacbrewpack 的 `--nspdir` 指向临时 `build` 目录；构建成功后才创建
+  输出目录，并将唯一成品 `名称 [TitleID] (MOD).nsp` 移入。
+- 失败或中断时输出目录根本不会被创建，无任何残留；临时目录默认随
+  `finally` 清理，`--keep_temp` 可保留供诊断。
+
+## 已验证
+
+- `_make_work_dir` 三场景单测通过：输出目录同盘 / 不存在的盘符回退
+  系统临时目录 / 输出目录在盘根；
+- 真实菜单全流程（GBK 中文路径管道驱动 NSCB.bat → 选项 11 → 重建成
+  功，产物内 mod main md5 一致）在上一批次已验收，本批改动仅涉及
+  产物路径逻辑。
+
+---
+
 # NSCB 2.0a 更新说明（2026-09-28）：MODBAKE —— mod 整合进本体
 
 ## 新增功能

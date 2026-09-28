@@ -300,6 +300,20 @@ def _safe_name(name):
 	return _BAD_CHARS.sub('', name).strip().rstrip('.')
 
 
+def _make_work_dir(outdir):
+	'''Temp work dir for every intermediate. Prefers the same volume as the
+	output dir (the finished NSP is then moved in by a rename) and falls
+	back to the system temp folder; it never lives inside outdir itself,
+	so the output dir only ever receives the final file.'''
+	last_err = None
+	for root in (os.path.dirname(outdir), None):
+		try:
+			return tempfile.mkdtemp(prefix='_modbake_', dir=root)
+		except OSError as e:
+			last_err = e
+	raise last_err
+
+
 def run(args):
 	if not args.bake_mod:
 		return
@@ -357,11 +371,11 @@ def run(args):
 
 	outdir = args.ofolder[0] if args.ofolder else os.path.join(os.path.dirname(os.path.abspath(game)), 'MODBAKE_output')
 	outdir = os.path.abspath(outdir)
-	os.makedirs(outdir, exist_ok=True)
-	work = os.path.join(outdir, '_bake_temp')
-	if os.path.isdir(work):
-		shutil.rmtree(work, ignore_errors=True)
-	os.makedirs(work)
+	# All intermediates (extracted NCAs, hacbrewpack build/temp, logs,
+	# sanitized keyset, the raw built NSP) stay in the temp work dir;
+	# outdir is only created when the finished NSP is moved in, so a
+	# failed run leaves no trace in the output location.
+	work = _make_work_dir(outdir)
 
 	print('**************************************************************************')
 	print('                     NSC_Builder 2.0a -- MODBAKE                          ')
@@ -432,6 +446,8 @@ def run(args):
 			hbp_keyset = os.path.join(work, '_hbp_keys.txt')
 			_hbp_sanitize(keyset, hbp_keyset)
 			print('  -> 密钥文件含损坏行，已生成净化副本供 hacbrewpack 使用')
+		build_dir = os.path.join(work, 'build')
+		os.makedirs(build_dir)
 		cmd = [hbp, '-k', hbp_keyset,
 			   '--exefsdir', exefs_dir,
 			   '--romfsdir', romfs_dir,
@@ -440,7 +456,7 @@ def run(args):
 			   '--keygeneration', str(keygen),
 			   '--ncadir', os.path.join(work, 'nca_build'),
 			   '--tempdir', os.path.join(work, 'hbp_temp'),
-			   '--nspdir', outdir]
+			   '--nspdir', build_dir]
 		if sdkver:
 			cmd += ['--sdkversion', sdkver]
 		if legal_dir:
@@ -458,18 +474,19 @@ def run(args):
 			Print.error('MODBAKE: hacbrewpack failed (exit %d), log: %s' % (ret, hbp_log))
 			sys.exit(1)
 
-		built = sorted(glob.glob(os.path.join(outdir, '%s*.nsp' % titleid)), key=os.path.getmtime)
+		built = sorted(glob.glob(os.path.join(build_dir, '%s*.nsp' % titleid)), key=os.path.getmtime)
 		if not built:
-			Print.error('MODBAKE: hacbrewpack reported success but no NSP found in %s' % outdir)
+			Print.error('MODBAKE: hacbrewpack reported success but no NSP found in %s' % build_dir)
 			sys.exit(1)
 		src_nsp = built[-1]
 		name = _safe_name(tname) if tname else None
 		final = os.path.join(outdir, '%s [%s] (MOD).nsp' % (name, titleid)) if name \
 			else os.path.join(outdir, '%s (MOD).nsp' % titleid)
-		if os.path.abspath(src_nsp) != os.path.abspath(final):
-			if os.path.exists(final):
-				os.remove(final)
-			os.rename(src_nsp, final)
+		os.makedirs(outdir, exist_ok=True)
+		if os.path.exists(final):
+			os.remove(final)
+		print('  -> 写入成品到输出目录 ...')
+		shutil.move(src_nsp, final)
 
 		print('')
 		print('**************************************************************************')

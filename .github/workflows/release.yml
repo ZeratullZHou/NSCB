@@ -24,8 +24,8 @@ jobs:
           rsync -a ./ "dist/${PKG}/" \
             --exclude '.git' \
             --exclude '.github' \
-            --exclude 'tools' \
             --exclude 'dist' \
+            --exclude 'Documentation and Resources' \
             --exclude 'keys.txt'
           cd dist
           zip -r "../${PKG}.zip" "${PKG}"
