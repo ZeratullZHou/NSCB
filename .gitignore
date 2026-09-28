@@ -3,6 +3,7 @@ keys.txt
 dev_keys.txt
 prod.keys
 *.keys
+keys.txt.bak
 ztools/keys.txt
 
 # 第三方二进制 - 严禁提交（重分发风险，见 README 获取方式）
