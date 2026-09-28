@@ -6,8 +6,6 @@ prod.keys
 keys.txt.bak
 ztools/keys.txt
 
-# 第三方二进制 - 严禁提交（重分发风险，见 README 获取方式）
-hacbrewpack.exe
 
 # 运行时产物
 NSCB_output/

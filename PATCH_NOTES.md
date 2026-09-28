@@ -126,8 +126,9 @@ python squirrel.py --bake_mod 游戏.xci --mod_path <含 ExeFs/RomFs 的文件�
 - **密钥只从外置文件读取**：`-k` 显式路径，或自动搜索 `keys.txt` /
   `prod.keys` / `~/.switch`；本仓库与源码**永不包含任何密钥材料**，
   `.gitignore` 已覆盖全部密钥文件模式。
-- **hacbrewpack.exe 为第三方二进制**，已加入 `.gitignore`，不随仓库分发；
-  用户自行获取后放入 `ztools\`。
+- **hacbrewpack.exe 为第三方二进制**（The-4n，v3.05，GPL-3.0）：初版
+  曾出于谨慎不随仓库分发；自 2.0a-fix1 起已随仓库附带（许可证见
+  `tools/py/ztools/hacbrewpack_LICENSE`），发布包含入，开箱即用。
 - 重建的 NCA 无任天堂签名：安装需大气层 sigpatches + DBI/Tinfoil，或
   SX OS；产物仅限自用，请勿分发。
 
