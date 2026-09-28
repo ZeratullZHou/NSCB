@@ -1,3 +1,32 @@
+# NSCB 2.0a 更新说明（2026-09-28 其三）：真实用例驱动的构建修复
+
+以「死印 死印 Spirit Hunter ~Death Mark~」（1G+1U+3D 合并 XCI + 汉化
+LayeredFS mod）为真实用例，修复三处会导致重建失败的问题：
+
+- **hacbrewpack 拒绝非 ASCII 密钥路径**：它把 `-k` 路径按 UTF-8→UTF-16
+  转换，系统代码页（GBK）路径直接报 `Failed to convert ... to
+  UTF-16!`。现在密钥一律暂存到纯 ASCII 路径（`%TEMP%` 优先，回退脚本
+  目录）供其使用，含损坏行时顺带净化；原 keys.txt 不动，随构建清理。
+- **「输出目录」直接回车产生垃圾参数**：`set var=%var:"=%` 在变量未
+  定义时会把后续参数（如 `-k`）吞进 `-o` 的值。菜单 11 与
+  `NSCB_MODBAKE.bat` 两处均已加 `if defined` 保护。
+- **SDK 版本过低的合理钳制**：hacbrewpack 拒绝低于 11.0.0（000B0000）
+  的 SDK 版本，老游戏（如 2017 年 死印 本体为 4.0.5）无法重建。SDK
+  仅为 NCA 元数据，低于下限时自动钳制到 000B0000。
+- **合并卡带的本体内容选择**：1G+1U+3D 这类合并包中本体/更新/DLC 同
+  包，内容识别不再"最后匹配胜出"，而是解析各候选 NCA 的头部（4KB 头
+  副本 + AES-XTSN 解密，不触碰分区数据），程序内容取**密钥世代最低**
+  者（即本体），Control/Legal 跟随所选 TitleID。
+- `sys.exit` 不再被自家 `except BaseException` 二次捕获为误导性的
+  `Exception: 1`。
+
+**真实验收**：死印 合并 XCI（4GB）+ 汉化 mod → 重建成功（EXIT=0），
+输出目录仅一个成品 `01001ed0075ee000 (MOD).nsp`（3.9GB）；原位解析
+成品 program NCA 的 exefs，`main` 与 mod 的 `main` md5 完全一致；全程
+临时目录零残留、输出目录无任何中间产物。
+
+---
+
 # NSCB 2.0a 更新说明（2026-09-28 其二）：整合MOD 菜单接入 + 产物目录隔离
 
 ## 主菜单接入（NSCB.bat 选项 11「整合MOD」）

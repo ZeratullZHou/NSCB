@@ -817,7 +817,7 @@ if not defined moddir goto :eof
 set moddir=%moddir:"=%
 set "mbout="
 set /p mbout=输出目录（直接回车 = 游戏同目录 MODBAKE_output）:
-set mbout=%mbout:"=%
+if defined mbout set mbout=%mbout:"=%
 rem MODBAKE 走 2.0a 源码（经典菜单保持打包 exe，互不影响）
 set mbcmd=python "%~dp0tools\py\ztools\squirrel.py" --bake_mod "%game%" --mod_path "%moddir%"
 if defined mbout set mbcmd=%mbcmd% -o "%mbout%"

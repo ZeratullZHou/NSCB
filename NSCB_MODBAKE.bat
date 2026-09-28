@@ -54,7 +54,7 @@ set "moddir=%moddir:"=%"
 
 set "outdir="
 set /p outdir=输出目录（直接回车 = 游戏同目录 MODBAKE_output）:
-set "outdir=%outdir:"=%"
+if defined outdir set "outdir=%outdir:"=%"
 
 set cmd=python squirrel.py --bake_mod "%game%" --mod_path "%moddir%"
 if defined outdir set cmd=%cmd% -o "%outdir%"

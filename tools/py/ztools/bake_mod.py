@@ -64,13 +64,39 @@ def _hbp_safe(content):
 
 def _hbp_sanitize(keyset_path, dest_path):
 	'''Write a copy of the keyset with malformed lines removed, for
-	hacbrewpack's strict parser. The copy lives in the temp work folder
-	only; the original external keyset is never modified.'''
+	hacbrewpack's strict parser. The copy lives in a temp folder only;
+	the original external keyset is never modified.'''
 	with open(keyset_path, 'r', encoding='utf-8', errors='ignore') as src, \
 		 open(dest_path, 'w', encoding='utf-8', errors='ignore') as dst:
 		for line in src:
 			if _hbp_safe_line(line.rstrip('\r\n')):
 				dst.write(line)
+
+
+def _ascii_stage_dir(work):
+	'''Directory with a pure-ASCII path for files handed to hacbrewpack:
+	its keyset loader converts the -k path to UTF-16 assuming UTF-8, so a
+	system-codepage (e.g. GBK) path aborts with "Failed to convert ...
+	to UTF-16".'''
+	for cand in (tempfile.gettempdir(), os.path.dirname(os.path.abspath(__file__))):
+		if cand and os.path.join(cand, 'x').isascii():
+			return cand
+	return work
+
+
+def _stage_hbp_keyset(keyset, work):
+	'''Copy the keyset to an ASCII-safe path for hacbrewpack, dropping
+	malformed entries for its strict parser along the way. Returns the
+	copy path; the original external keyset stays untouched.'''
+	dest = os.path.join(_ascii_stage_dir(work), '_hbp_keys_%d.txt' % os.getpid())
+	with open(keyset, 'r', encoding='utf-8', errors='ignore') as f:
+		content = f.read()
+	if _hbp_safe(content):
+		shutil.copyfile(keyset, dest)
+	else:
+		_hbp_sanitize(keyset, dest)
+		print('  -> 密钥文件含损坏行，已生成净化副本供 hacbrewpack 使用')
+	return dest
 
 
 def _find_keyset(explicit):
@@ -185,32 +211,99 @@ def _is_pfs0(path_):
 	return os.path.basename(path_).lower().endswith('pfs0')
 
 
-def _classify_extracted(nca_dir):
+def _nca_head_info(nca_folder, game, files_list, nca_dir):
+	'''TitleID + keygeneration of an extracted NCA, decrypted from a raw
+	4KB head copy. NCA3() is deliberately not used here: its constructor
+	also probes section data, which a truncated head copy cannot satisfy
+	(and a full standalone copy of every candidate would cost GBs).'''
+	import io
+	from Fs import pyNCA3
+	name = os.path.basename(nca_folder)[:-4] + '.nca'
+	entry = None
+	for e in files_list:
+		if e[0] == name:
+			entry = e
+			break
+	if entry is None:
+		raise ValueError('NCA %s not found in container' % name)
+	offset, size = entry[1], entry[3]
+	with open(game, 'rb') as src:
+		src.seek(offset)
+		raw_head = src.read(min(0x1000, size))
+	header_keys = pyNCA3.keys['nca_header_key'][:0x10], pyNCA3.keys['nca_header_key'][0x10:]
+	cipher = pyNCA3.AESXTSN(header_keys)
+	raw_header = cipher.decrypt(raw_head)
+	header = pyNCA3.NCAHeader(io.BytesIO(raw_header))
+	return '%016x' % header.tid, (header.crypto_type_2 or header.crypto_type)
+
+
+def _classify_extracted(nca_dir, game, files_list):
 	'''Identify exefs/romfs/logo/control/legal among the extracted folders.
+
+	Merged containers (base+update+DLC in one file) carry several program
+	and control NCAs; the rebuild must use the BASE game content, so among
+	the ExeFS candidates the one with the lowest keygeneration wins (update
+	NCAs are encrypted for a newer master key). Control / legal / logo
+	follow the chosen program's TitleID when one matches.
 
 	Returns a dict of role -> path. Roles: exefs, romfs, logo, control, legal.
 	'''
-	roles = {}
+	programs = []   # (keygen, tid, exefs_sec, romfs_sec, logo_sec)
+	controls = []   # (tid, control_sec)
+	legals = []     # (tid, legal_sec)
 	for folder in sorted(glob.glob(os.path.join(nca_dir, '*_nca'))):
 		sections = _sections_of(folder)
-		for sec in sections:
-			files = set(os.listdir(sec))
+		files_by_sec = [(sec, set(os.listdir(sec))) for sec in sections]
+		exefs_sec = romfs_sec = logo_sec = None
+		for sec, files in files_by_sec:
 			if 'main.npdm' in files:
-				roles['exefs'] = sec
+				exefs_sec = sec
 				for other in sections:
-					if other != sec and 'romfs' in os.path.basename(other).lower():
-						roles['romfs'] = other
-				# a further pfs0 section is only the logo partition when it
-				# actually contains the boot logo asset
-				for other in sections:
-					if other != sec and _is_pfs0(other):
-						lfiles = {f.lower() for f in os.listdir(other)}
-						if 'nintendologo.png' in lfiles:
-							roles['logo'] = other
-			elif 'control.nacp' in files:
-				roles['control'] = sec
-			elif 'legalinfo.xml' in files:
-				roles['legal'] = sec
+					if other == sec:
+						continue
+					if 'romfs' in os.path.basename(other).lower():
+						romfs_sec = other
+					elif _is_pfs0(other) and 'nintendologo.png' in \
+							{f.lower() for f in os.listdir(other)}:
+						logo_sec = other
+				break
+		if exefs_sec is not None:
+			tid, keygen = _nca_head_info(folder, game, files_list, nca_dir)
+			programs.append((keygen, tid, exefs_sec, romfs_sec, logo_sec))
+			continue
+		for sec, files in files_by_sec:
+			if 'control.nacp' in files:
+				controls.append((_nca_head_info(folder, game, files_list, nca_dir), sec))
+				break
+			if 'legalinfo.xml' in files:
+				legals.append((_nca_head_info(folder, game, files_list, nca_dir), sec))
+				break
+
+	if not programs:
+		return {}
+	programs.sort(key=lambda p: (p[0], p[1]))
+	keygen, tid, exefs_sec, romfs_sec, logo_sec = programs[0]
+	if len(programs) > 1:
+		print('  -> 检测到 %d 个程序内容（合并包），选择本体: TID %s (keygeneration %d)'
+			  % (len(programs), tid, keygen))
+	roles = {'exefs': exefs_sec}
+	if romfs_sec:
+		roles['romfs'] = romfs_sec
+	if logo_sec:
+		roles['logo'] = logo_sec
+
+	def _pick(cands):
+		for c_tid, sec in cands:
+			if c_tid == tid:
+				return sec
+		return cands[0][1] if cands else None
+
+	control = _pick(controls)
+	if control:
+		roles['control'] = control
+	legal = _pick(legals)
+	if legal:
+		roles['legal'] = legal
 	return roles
 
 
@@ -393,6 +486,7 @@ def run(args):
 	# cannot reach it and the user can inspect it after the fact.
 	diag_log = os.path.join(tempfile.gettempdir(), 'MODBAKE_last_error.log')
 	hbp_log = os.path.join(work, 'hacbrewpack.log')
+	hbp_keyset = None
 
 	print('**************************************************************************')
 	print('                     NSC_Builder 2.0a -- MODBAKE                          ')
@@ -413,7 +507,7 @@ def run(args):
 		# ---- 2. Identify content --------------------------------------------
 		print('[2/4] 识别 Program / Control / Legal ...')
 		_prime_pynca3_keys(keyset)
-		roles = _classify_extracted(nca_dir)
+		roles = _classify_extracted(nca_dir, game, files_list)
 		for required in ('exefs', 'romfs', 'control'):
 			if required not in roles:
 				Print.error('MODBAKE: could not locate %s content in extracted NCA folders' % required)
@@ -428,6 +522,11 @@ def run(args):
 		titleid = header['titleid']
 		keygen = header['keygen']
 		sdkver = header['sdk']
+		if sdkver and int(sdkver, 16) < 0x000B0000:
+			# hacbrewpack rejects SDK versions below 11.0.0; the field is
+			# informational metadata in the rebuilt NCA, so clamp it.
+			print('  -> 原始 SDK 版本过低（%s），重建时改用 000B0000' % sdkver)
+			sdkver = '000B0000'
 		if header['rights']:
 			# Some converted dumps carry a rightsId while their NCAs stay
 			# standard-crypto encrypted. Extraction quality is what matters;
@@ -453,15 +552,11 @@ def run(args):
 		# ---- 4. Rebuild with hacbrewpack ------------------------------------
 		print('[4/4] hacbrewpack 重建 NSP（需要数分钟）...')
 		tname = _title_name(os.path.join(control_dir, 'control.nacp'))
-		# hacbrewpack's parser rejects keyset files with malformed entries;
-		# feed it a sanitized temp copy when needed (original stays untouched)
-		hbp_keyset = keyset
-		with open(keyset, 'r', encoding='utf-8', errors='ignore') as f:
-			_keyset_content = f.read()
-		if not _hbp_safe(_keyset_content):
-			hbp_keyset = os.path.join(work, '_hbp_keys.txt')
-			_hbp_sanitize(keyset, hbp_keyset)
-			print('  -> 密钥文件含损坏行，已生成净化副本供 hacbrewpack 使用')
+		# hacbrewpack converts the -k path to UTF-16 assuming UTF-8 (a GBK
+		# path kills the rebuild) and its strict parser rejects malformed
+		# keyset entries. Always stage a copy at an ASCII-safe location,
+		# sanitized when needed; the original stays untouched.
+		hbp_keyset = _stage_hbp_keyset(keyset, work)
 		build_dir = os.path.join(work, 'build')
 		os.makedirs(build_dir)
 		cmd = [hbp, '-k', hbp_keyset,
@@ -518,6 +613,10 @@ def run(args):
 		print('        或 SX OS。请勿在未破解主机上安装，请勿对外分发。')
 		print('  校验: 可用 squirrel -v "%s" 做完整性检查' % final)
 		print('**************************************************************************')
+	except SystemExit:
+		# Deliberate exits (hacbrewpack failure, validation) have already
+		# printed their own diagnostics; don't re-report them as "Exception: 1".
+		raise
 	except BaseException as e:
 		error(e)
 		# The menu cls-wipes the console right after this returns; persist
@@ -537,5 +636,11 @@ def run(args):
 			print('MODBAKE: temp kept for diagnosis at %s' % work)
 		sys.exit(1)
 	finally:
+		try:
+			if hbp_keyset and os.path.abspath(hbp_keyset) != os.path.abspath(keyset) \
+					and os.path.isfile(hbp_keyset):
+				os.remove(hbp_keyset)
+		except (OSError, UnboundLocalError):
+			pass
 		if not args.keep_temp and os.path.isdir(work):
 			shutil.rmtree(work, ignore_errors=True)

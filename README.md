@@ -20,7 +20,7 @@ NSC_Builder 是一款基于 Nut-FS 库的 Nintendo Switch 文件处理工具，�
 - **产物**：所有过程产物（解包 NCA、hacbrewpack 构建缓存、日志、密钥净化副本、中间 NSP）都写入临时工作目录（优先与输出目录同盘，回退游戏所在盘或系统 `%TEMP%`），结束后自动清理；**输出目录仅在构建成功时创建，且只保留一个成品** `名称 [TitleID] (MOD).nsp`，失败/中断不产生任何残留。失败时回溯栈与 hacbrewpack 日志自动写入 `%TEMP%\MODBAKE_last_error.log` 供排查；调试时可加 `--keep_temp` 保留临时目录。
 - **密钥**：只从外置文件读取（`-k` 显式指定，或自动搜索脚本目录及各级上级目录的 `keys.txt` / `prod.keys`，含仓库根 `ztools\`，以及 `~/.switch`），源码与仓库**永不包含任何密钥**；`hacbrewpack.exe` 为第三方二进制，已加入 `.gitignore`，需自行获取（作者 The-4n，见 `ztools/hacbrewpack_LICENSE`）。
 - **安装**：重建的 NCA 无任天堂签名，需大气层 **sigpatches** + DBI/Tinfoil 安装，或 SX OS；请勿在未破解主机安装、请勿分发成品。
-- **限制**：仅支持标准加密（gamecard/标准 crypto）dump；mod 的 `ExeFs\main` 与游戏版本需匹配。
+- **限制**：仅支持标准加密（gamecard/标准 crypto）dump；mod 的 `ExeFs\main` 与游戏版本需匹配。支持本体+更新+DLC 合并包（自动选取密钥世代最低的本体内容）；老游戏（SDK < 11.0.0）重建时自动钳制 SDK 版本。
 
 ## 本分支修复了什么
 
