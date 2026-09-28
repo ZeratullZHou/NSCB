@@ -58,7 +58,8 @@ set "outdir=%outdir:"=%"
 set cmd=python squirrel.py --bake_mod "%game%" --mod_path "%moddir%"
 if defined outdir set cmd=%cmd% -o "%outdir%"
 if exist "%prog_dir%prod.keys" set cmd=%cmd% -k "%prog_dir%prod.keys%"
-if not exist "%prog_dir%prod.keys" if exist "keys.txt" set cmd=%cmd% -k "%zt%\keys.txt"
+if not exist "%prog_dir%prod.keys" if exist "%zt%\keys.txt" set cmd=%cmd% -k "%zt%\keys.txt"
+if not exist "%prog_dir%prod.keys" if not exist "%zt%\keys.txt" if exist "%prog_dir%ztools\keys.txt" set cmd=%cmd% -k "%prog_dir%ztools\keys.txt"
 
 echo.
 %cmd%

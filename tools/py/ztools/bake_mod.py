@@ -59,19 +59,35 @@ def _find_keyset(explicit):
 	'''Locate a Lockpick-style keyset file (external files only).
 	Valid candidates must contain the keys NCA handling needs. When several
 	candidates qualify, prefer ones free of malformed entries (some dumps
-	carry corrupted lines that hacbrewpack's strict parser rejects).'''
+	carry corrupted lines that hacbrewpack's strict parser rejects).
+	Searches the script folder, its ancestors (covers repo layouts like
+	<repo>/ztools/keys.txt) and the standard ~/.switch location.'''
 	candidates = []
 	if explicit:
 		candidates.append(explicit)
 	home = os.path.expanduser('~')
 	script_dir = os.path.dirname(os.path.abspath(__file__))
-	here = os.getcwd()
-	for base in (here, script_dir, os.path.join(home, '.switch'), home):
-		for name in ('prod.keys', 'keys.txt'):
-			candidates.append(os.path.join(base, name))
-	first_valid = None
+	bases = []
+	folder = script_dir
+	for _ in range(4):
+		bases.append(folder)
+		folder = os.path.dirname(folder)
+	bases += [os.path.join(home, '.switch'), home]
+	for base in bases:
+		for rel in ('prod.keys', 'keys.txt', os.path.join('ztools', 'prod.keys'), os.path.join('ztools', 'keys.txt')):
+			candidates.append(os.path.join(base, rel))
+	seen = set()
+	ordered = []
 	for path in candidates:
-		if not path or not os.path.isfile(path):
+		if not path:
+			continue
+		key = os.path.normcase(os.path.abspath(path))
+		if key not in seen:
+			seen.add(key)
+			ordered.append(path)
+	first_valid = None
+	for path in ordered:
+		if not os.path.isfile(path):
 			continue
 		try:
 			with open(path, 'r', encoding='utf-8', errors='ignore') as f:

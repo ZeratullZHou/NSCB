@@ -12,7 +12,7 @@ NSC_Builder 是一款基于 Nut-FS 库的 Nintendo Switch 文件处理工具，�
   ztools\squirrel.py --bake_mod 游戏.xci --mod_path mod文件夹 -o 输出目录 -k 密钥文件
   ```
 - **流程**：解包容器 NCA（原生 pyNCA3 解密）→ 识别 Program/Control/Legal → 覆盖 mod → 调用内置 `hacbrewpack.exe` 重建 NSP。
-- **密钥**：只从外置文件读取（`-k` 显式指定，或自动搜索 `keys.txt` / `prod.keys` / `~/.switch`），源码与仓库**永不包含任何密钥**；`hacbrewpack.exe` 为第三方二进制，已加入 `.gitignore`，需自行获取（作者 The-4n，见 `ztools/hacbrewpack_LICENSE`）。
+- **密钥**：只从外置文件读取（`-k` 显式指定，或自动搜索脚本目录及各级上级目录的 `keys.txt` / `prod.keys`，含仓库根 `ztools\`，以及 `~/.switch`），源码与仓库**永不包含任何密钥**；`hacbrewpack.exe` 为第三方二进制，已加入 `.gitignore`，需自行获取（作者 The-4n，见 `ztools/hacbrewpack_LICENSE`）。
 - **安装**：重建的 NCA 无任天堂签名，需大气层 **sigpatches** + DBI/Tinfoil 安装，或 SX OS；请勿在未破解主机安装、请勿分发成品。
 - **限制**：仅支持标准加密（gamecard/标准 crypto）dump；mod 的 `ExeFs\main` 与游戏版本需匹配。
 
