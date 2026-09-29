@@ -182,7 +182,9 @@ class RomFS:
 			'Parent':	 read_u32(self.file_table, offset + 0x0),
 			'Sibling':	read_u32(self.file_table, offset + 0x4),
 			'DataOffset': read_u64(self.file_table, offset + 0x8),
-			'Size':	   read_u32(self.file_table, offset + 0x10),
+			# FileSize is u64 in the RomFS spec; reading u32 truncated any
+			# file >= 4 GiB to (size mod 4 GiB) on extraction
+			'Size':	   read_u64(self.file_table, offset + 0x10),
 			'Name':	   read_at(self.file_table, offset + 0x20, read_u32(self.file_table, offset + 0x1C)).decode()
 		}
 		file_entry = FileEntry(parent, file_dict['Name'], file_dict['Size'])
