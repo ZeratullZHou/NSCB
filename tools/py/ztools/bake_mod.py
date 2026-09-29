@@ -724,6 +724,20 @@ def run(args):
 			+ (['%dD' % len(dlc_tids)] if dlc_tids else [])
 		comp = '+'.join(parts)
 
+		# Source composition for the name tag: update romfs sections are
+		# BKTR patches which pyNCA3/hacbrewpack cannot rebuild, so the
+		# update is normally NOT folded in; record its presence and version
+		# in the filename so nothing is hidden. Update presence is detected
+		# from the header catalog — NOT from extraction, which crashes on
+		# BKTR sections.
+		upd_tid_hex = '%016x' % (base_tid_int | 0x800)
+		src_has_update = any(v[0] == upd_tid_hex for v in catalog.values())
+		src_upd_ver = _cnmt_version(metas[upd_tid_hex]['cnmt']) \
+			if src_has_update and upd_tid_hex in metas else None
+		src_parts = ['1G'] + (['1U'] if src_has_update else []) \
+			+ (['%dD' % len(dlc_tids)] if dlc_tids else [])
+		src_comp = '+'.join(src_parts)
+
 		dlc_entries = []
 		if dlc_tids:
 			raw_dir = os.path.join(work, 'raw')
@@ -824,12 +838,20 @@ def run(args):
 		entries.sort(key=lambda e: (0 if e[0].endswith('.cnmt.nca') else 1, e[0]))
 
 		name = _safe_name(tname) if tname else None
+		# source-info tag: visible whenever the source carried an update
+		# that could not be folded in (BKTR patch romfs)
+		src_tag = ''
+		if src_comp != comp:
+			src_tag = ' [源%s' % src_comp
+			if src_upd_ver is not None:
+				src_tag += '_v%d' % src_upd_ver
+			src_tag += '未并入]'
 		if name and ver is not None:
-			final = os.path.join(outdir, '%s [%s] [v%d] (%s) (MOD).nsp' % (name, titleid, ver, comp))
+			final = os.path.join(outdir, '%s [%s] [v%d] (%s) (MOD)%s.nsp' % (name, titleid, ver, comp, src_tag))
 		elif name:
-			final = os.path.join(outdir, '%s [%s] (%s) (MOD).nsp' % (name, titleid, comp))
+			final = os.path.join(outdir, '%s [%s] (%s) (MOD)%s.nsp' % (name, titleid, comp, src_tag))
 		else:
-			final = os.path.join(outdir, '%s (%s) (MOD).nsp' % (titleid, comp))
+			final = os.path.join(outdir, '%s (%s) (MOD)%s.nsp' % (titleid, comp, src_tag))
 		os.makedirs(outdir, exist_ok=True)
 		if os.path.exists(final):
 			os.remove(final)
@@ -842,9 +864,11 @@ def run(args):
 		print('  大小: %.2f GB | 构成: %s' % (os.path.getsize(final) / (1024 * 1024 * 1024), comp))
 		if tname:
 			print('  名称: %s' % tname)
-		if update_prog is not None and not sel_is_update:
-			print('  注意: 源包含更新内容但未并入（安装本成品时请勿另装原版更新，')
-			print('        否则更新会覆盖 mod 化的本体）')
+		if src_has_update and not sel_is_update:
+			ver_str = ('v%d' % src_upd_ver) if src_upd_ver is not None else '版本未知'
+			print('  注意: 源含更新（%s）未并入——mod 面向本体版本，且更新的 romfs 为' % ver_str)
+			print('        BKTR 补丁（无法正确重打包）。安装本成品时请勿另装原版更新，')
+			print('        否则更新会覆盖 mod 化的本体')
 		print('  注意: 重建的 NCA 无任天堂签名，安装需要大气层 sigpatches + DBI/Tinfoil，')
 		print('        或 SX OS。请勿在未破解主机上安装，请勿对外分发。')
 		print('  校验: 可用 squirrel -v "%s" 做完整性检查' % final)
