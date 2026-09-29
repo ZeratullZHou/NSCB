@@ -17,7 +17,7 @@ NSC_Builder 是一款基于 Nut-FS 库的 Nintendo Switch 文件处理工具，�
   其余菜单功能（合并/转换/拆分等）走原打包程序，行为与 1.01b 完全一致，不受影响。
   整合MOD 基于 Python 源码运行，需要本机安装 Python 3.7+ 及依赖（双击 `tools\py\install_dependencies.bat` 一键安装）；经典菜单功能为独立打包 exe，无需 Python。
 - **流程**：解包容器 NCA（原生 pyNCA3 解密）→ 识别 Program/Control/Legal → 覆盖 mod → 调用内置 `hacbrewpack.exe` 重建 NSP。
-- **产物**：默认输出到工具根的 **`NSCB_output`** 目录（也可在提示时输入其他目录）。所有过程产物（解包 NCA、hacbrewpack 构建缓存、日志、密钥净化副本、中间 NSP）都写入纯 ASCII 路径的临时工作目录（hacbrewpack 无法处理中文路径），结束后自动清理；**输出目录里每次整合只新增一个成品** `名称 [TitleID] (MOD).nsp`，失败/中断不产生任何残留。失败时回溯栈与 hacbrewpack 日志自动写入 `%TEMP%\MODBAKE_last_error.log` 供排查；调试时可加 `--keep_temp` 保留临时目录。
+- **产物**：默认输出到工具根的 **`NSCB_output`** 目录（也可在提示时输入其他目录）。命名对齐 NSCB 合并包风格：`游戏名 [TitleID] [v版本] (1G[+1U][+xD]) (MOD).nsp`。整合时会读取 mod 的 build-id 自动匹配本体/更新版本，把 mod 烤进匹配的那个内容；**DLC 原样并入**成品（一次安装全套）；update 仅在 mod 匹配更新版本时并入（否则并入会被覆盖导致 mod 失效，此时成品不含更新并给出提示）。所有过程产物都写入纯 ASCII 路径的临时工作目录（hacbrewpack 无法处理中文路径），结束后自动清理；失败时回溯栈与 hacbrewpack 日志自动写入 `%TEMP%\MODBAKE_last_error.log` 供排查；调试时可加 `--keep_temp` 保留临时目录。
 - **密钥**：只从外置文件读取（`-k` 显式指定，或自动搜索脚本目录及各级上级目录的 `keys.txt` / `prod.keys`，含仓库根 `ztools\`，以及 `~/.switch`），源码与仓库**永不包含任何密钥**，仅有 `ztools\keys_template.txt` 模板供参考格式。构建器 `hacbrewpack.exe`（The-4n，v3.05，GPL-3.0）已随仓库附带、开箱即用，许可证见 `tools\py\ztools\hacbrewpack_LICENSE`。
 - **安装**：重建的 NCA 无任天堂签名，需大气层 **sigpatches** + DBI/Tinfoil 安装，或 SX OS；请勿在未破解主机安装、请勿分发成品。
 - **限制**：仅支持标准加密（gamecard/标准 crypto）dump；mod 的 `ExeFs\main` 与游戏版本需匹配。支持本体+更新+DLC 合并包（自动选取密钥世代最低的本体内容）；老游戏（SDK < 11.0.0）重建时自动钳制 SDK 版本。

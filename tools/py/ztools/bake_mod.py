@@ -24,6 +24,7 @@ import re
 import sys
 import glob
 import shutil
+import struct
 import tempfile
 import traceback
 import subprocess
@@ -234,24 +235,107 @@ def _nca_head_info(nca_folder, game, files_list, nca_dir):
 	cipher = pyNCA3.AESXTSN(header_keys)
 	raw_header = cipher.decrypt(raw_head)
 	header = pyNCA3.NCAHeader(io.BytesIO(raw_header))
-	return '%016x' % header.tid, (header.crypto_type_2 or header.crypto_type)
+	return '%016x' % header.tid, (header.crypto_type_2 or header.crypto_type), header.content_type
 
 
-def _classify_extracted(nca_dir, game, files_list):
-	'''Identify exefs/romfs/logo/control/legal among the extracted folders.
+def _catalog_contents(game, files_list):
+	'''{nca_name: (tid, keygen, content_type)} for every NCA of the
+	container, via 4KB head parses (no extraction needed).'''
+	import io
+	from Fs import pyNCA3
+	catalog = {}
+	with open(game, 'rb') as src:
+		for e in files_list:
+			if not e[0].endswith('.nca'):
+				continue
+			try:
+				src.seek(e[1])
+				hk = pyNCA3.keys['nca_header_key']
+				cipher = pyNCA3.AESXTSN((hk[:0x10], hk[0x10:]))
+				header = pyNCA3.NCAHeader(io.BytesIO(cipher.decrypt(src.read(min(0x1000, e[3])))))
+			except BaseException:
+				continue
+			catalog[e[0]] = ('%016x' % header.tid,
+							 (header.crypto_type_2 or header.crypto_type),
+							 header.content_type)
+	return catalog
 
-	Merged containers (base+update+DLC in one file) carry several program
-	and control NCAs; the rebuild must use the BASE game content, so among
-	the ExeFS candidates the one with the lowest keygeneration wins (update
-	NCAs are encrypted for a newer master key). Control / legal / logo
-	follow the chosen program's TitleID when one matches.
 
-	Returns a dict of role -> path. Roles: exefs, romfs, logo, control, legal.
+def _nso_build_id(path):
+	'''NSO build-id: the 0x20 bytes at offset 0x40 of a main binary.
+	Two exefs main binaries with the same build-id are the same build,
+	which is how the mod's target version gets detected.'''
+	try:
+		with open(path, 'rb') as f:
+			f.seek(0x40)
+			b = f.read(0x20)
+		if len(b) == 0x20 and any(b):
+			return b.hex()
+	except OSError:
+		pass
+	return None
+
+
+def _cnmt_version(cnmt_path):
+	'''Title version from a .cnmt file (u32 at 0x08).'''
+	import struct
+	try:
+		with open(cnmt_path, 'rb') as f:
+			f.seek(0x8)
+			return struct.unpack('<I', f.read(4))[0]
+	except (OSError, struct.error):
+		return None
+
+
+def _pack_nsp(dest_path, entries):
+	'''Pack (name, path) pairs into an NSP: a plain PFS0 container. NCAs
+	are copied byte-identical, so the hashes inside their CNMTs stay
+	valid; file data is padded to 0x200 like NSCB's own NSPs.'''
+	names = [n for n, _ in entries]
+	st = b''.join(n.encode() + b'\0' for n in names)
+	st_len = (len(st) + 0x1F) // 0x20 * 0x20
+	header_size = 0x10 + 0x18 * len(entries) + st_len
+	table = b''
+	string_table = b''
+	offset = 0  # PFS0 entry offsets are relative to the end of the header
+	for n, p in entries:
+		sz = os.path.getsize(p)
+		table += struct.pack('<QQII', offset, sz, len(string_table), 0)
+		string_table += n.encode() + b'\0'
+		offset += (sz + 0x1FF) // 0x200 * 0x200
+	with open(dest_path, 'wb') as out:
+		out.write(b'PFS0' + struct.pack('<III', len(entries), st_len, 0))
+		out.write(table)
+		out.write(string_table + b'\0' * (st_len - len(string_table)))
+		for n, p in entries:
+			with open(p, 'rb') as src:
+				while True:
+					b = src.read(4 << 20)
+					if not b:
+						break
+					out.write(b)
+			sz = os.path.getsize(p)
+			pad = (sz + 0x1FF) // 0x200 * 0x200 - sz
+			if pad:
+				out.write(b'\0' * pad)
+
+
+def _scan_contents(nca_dir, catalog):
+	'''Role-scan the extracted NCA folders, joined with the header catalog.
+
+	Returns (programs, controls, metas, legals):
+	programs: [{'nca_id','tid','keygen','exefs','romfs','logo'}] sorted by
+	          keygeneration (index 0 = 本体, later = updates)
+	controls: [{'nca_id','tid','keygen','dir'}] sorted by keygeneration
+	metas:    {tid: {'nca_id','cnmt'}}  (one entry per CNMT meta NCA)
+	legals:   [dir with legalinfo.xml]
 	'''
-	programs = []   # (keygen, tid, exefs_sec, romfs_sec, logo_sec)
-	controls = []   # (tid, control_sec)
-	legals = []     # (tid, legal_sec)
+	programs, controls, metas, legals = [], [], {}, []
 	for folder in sorted(glob.glob(os.path.join(nca_dir, '*_nca'))):
+		nca_id = os.path.basename(folder)[:-4]
+		info = catalog.get(nca_id + '.nca')
+		if info is None:
+			continue
 		sections = _sections_of(folder)
 		files_by_sec = [(sec, set(os.listdir(sec))) for sec in sections]
 		exefs_sec = romfs_sec = logo_sec = None
@@ -268,43 +352,28 @@ def _classify_extracted(nca_dir, game, files_list):
 						logo_sec = other
 				break
 		if exefs_sec is not None:
-			tid, keygen = _nca_head_info(folder, game, files_list, nca_dir)
-			programs.append((keygen, tid, exefs_sec, romfs_sec, logo_sec))
+			tid, keygen, _ = info
+			programs.append({'nca_id': nca_id, 'tid': tid, 'keygen': keygen,
+							 'exefs': exefs_sec, 'romfs': romfs_sec,
+							 'logo': logo_sec})
 			continue
 		for sec, files in files_by_sec:
 			if 'control.nacp' in files:
-				controls.append((_nca_head_info(folder, game, files_list, nca_dir), sec))
+				tid, keygen, _ = info
+				controls.append({'nca_id': nca_id, 'tid': tid,
+								 'keygen': keygen, 'dir': sec})
+				break
+			cnmt = next((f for f in files if f.endswith('.cnmt')), None)
+			if cnmt:
+				tid, keygen, _ = info
+				metas[tid] = {'nca_id': nca_id, 'cnmt': os.path.join(sec, cnmt)}
 				break
 			if 'legalinfo.xml' in files:
-				legals.append((_nca_head_info(folder, game, files_list, nca_dir), sec))
+				legals.append(sec)
 				break
-
-	if not programs:
-		return {}
-	programs.sort(key=lambda p: (p[0], p[1]))
-	keygen, tid, exefs_sec, romfs_sec, logo_sec = programs[0]
-	if len(programs) > 1:
-		print('  -> 检测到 %d 个程序内容（合并包），选择本体: TID %s (keygeneration %d)'
-			  % (len(programs), tid, keygen))
-	roles = {'exefs': exefs_sec}
-	if romfs_sec:
-		roles['romfs'] = romfs_sec
-	if logo_sec:
-		roles['logo'] = logo_sec
-
-	def _pick(cands):
-		for c_tid, sec in cands:
-			if c_tid == tid:
-				return sec
-		return cands[0][1] if cands else None
-
-	control = _pick(controls)
-	if control:
-		roles['control'] = control
-	legal = _pick(legals)
-	if legal:
-		roles['legal'] = legal
-	return roles
+	programs.sort(key=lambda p: (p['keygen'], p['tid']))
+	controls.sort(key=lambda c: (c['keygen'], c['tid']))
+	return programs, controls, metas, legals
 
 
 def _ensure_standalone_nca(game, files_list, nca_dir, prog_folder):
@@ -590,19 +659,39 @@ def run(args):
 		os.makedirs(nca_dir)
 		files_list = _extract_container_ncas(game, nca_dir)
 
-		# ---- 2. Identify content --------------------------------------------
+		# ---- 2. Identify content & match the mod's version ------------------
 		print('[2/4] 识别 Program / Control / Legal ...')
 		_prime_pynca3_keys(keyset)
-		roles = _classify_extracted(nca_dir, game, files_list)
-		for required in ('exefs', 'romfs', 'control'):
-			if required not in roles:
-				Print.error('MODBAKE: could not locate %s content in extracted NCA folders' % required)
-				sys.exit(1)
-		exefs_dir = roles['exefs']
-		romfs_dir = roles['romfs']
-		control_dir = roles['control']
-		legal_dir = roles.get('legal')
-		logo_dir = roles.get('logo')
+		catalog = _catalog_contents(game, files_list)
+		programs, controls, metas, legals = _scan_contents(nca_dir, catalog)
+		if not programs or not controls:
+			Print.error('MODBAKE: could not locate Program/Control content in extracted NCA folders')
+			sys.exit(1)
+		base_prog = programs[0]                              # lowest keygen = 本体
+		update_prog = programs[1] if len(programs) > 1 else None
+
+		# pick the program whose exefs main build-id matches the mod's;
+		# an unmatched (or romfs-only) mod falls back to 本体
+		sel = base_prog
+		mod_bid = _nso_build_id(os.path.join(mod_exefs, 'main')) if mod_exefs else None
+		if mod_bid:
+			for p in programs:
+				if p is not base_prog and \
+						_nso_build_id(os.path.join(p['exefs'], 'main')) == mod_bid:
+					sel = p
+					break
+		sel_is_update = sel is not base_prog
+		if update_prog is not None:
+			if sel_is_update:
+				print('  -> mod 与更新内容 build-id 一致：更新内容将整合进本体')
+			else:
+				print('  -> 检测到更新内容：mod 与其 build-id 不匹配，为避免被覆盖，更新不并入成品')
+
+		exefs_dir = sel['exefs']
+		romfs_dir = sel['romfs']
+		control_dir = controls[min(programs.index(sel), len(controls) - 1)]['dir']
+		legal_dir = legals[0] if legals else None
+		logo_dir = sel.get('logo')
 
 		header = _read_program_header(game, files_list, nca_dir, exefs_dir)
 		titleid = header['titleid']
@@ -622,6 +711,39 @@ def run(args):
 		print('  -> RomFS:  %s' % romfs_dir)
 		print('  -> Control: %s' % os.path.basename(control_dir))
 		print('  -> TitleID: %s | keygeneration: %d | SDK: %s' % (titleid, keygen, sdkver))
+
+		# DLC contents (raw copy; their own CNMTs travel with them) and the
+		# title version for the output name
+		base_tid_int = int(base_prog['tid'], 16)
+		dlc_tids = sorted({t for t in {v[0] for v in catalog.values()}
+						   if t not in (base_prog['tid'],) and 1 <= int(t, 16) - base_tid_int <= 0xFFF
+						   and (int(t, 16) - base_tid_int) != 0x800 and t in metas})
+		ver_tid = ('%016x' % (base_tid_int | 0x800)) if sel_is_update else base_prog['tid']
+		ver = _cnmt_version(metas[ver_tid]['cnmt']) if ver_tid in metas else None
+		parts = ['1G'] + (['1U'] if sel_is_update else []) \
+			+ (['%dD' % len(dlc_tids)] if dlc_tids else [])
+		comp = '+'.join(parts)
+
+		dlc_entries = []
+		if dlc_tids:
+			raw_dir = os.path.join(work, 'raw')
+			os.makedirs(raw_dir)
+			for e in files_list:
+				info = catalog.get(e[0])
+				if not info or info[0] not in dlc_tids:
+					continue
+				dst = os.path.join(raw_dir, e[0])
+				with open(game, 'rb') as srcf, open(dst, 'wb') as dstd:
+					srcf.seek(e[1])
+					rem = e[3]
+					while rem > 0:
+						b = srcf.read(min(4 << 20, rem))
+						if not b:
+							break
+						dstd.write(b)
+						rem -= len(b)
+				dlc_entries.append((e[0], dst))
+			print('  -> 并入 DLC: %d 个（原样打包）' % len(dlc_tids))
 
 		# ---- 3. Overlay the mod ---------------------------------------------
 		print('[3/4] 覆盖 mod 文件 ...')
@@ -682,22 +804,47 @@ def run(args):
 		if not built:
 			Print.error('MODBAKE: hacbrewpack reported success but no NSP found in %s' % build_dir)
 			sys.exit(1)
-		src_nsp = built[-1]
+		# Unwrap hacbrewpack's single-content NSP and repack it together
+		# with the raw DLC contents into the final multi-content NSP.
+		assembly = os.path.join(work, 'assembly')
+		os.makedirs(assembly)
+		from Fs.pyPFS0 import PFS0
+		entries = []
+		with open(built[-1], 'rb') as nf:
+			pfs0 = PFS0(nf)
+			for fname in pfs0.files:
+				dst = os.path.join(assembly, fname)
+				inf = pfs0.open(fname)
+				with open(dst, 'wb') as out:
+					shutil.copyfileobj(inf, out, 4 << 20)
+				inf.close()
+				entries.append((fname, dst))
+		entries += dlc_entries
+		# CNMT meta NCAs first (NSCB-style ordering), then everything else
+		entries.sort(key=lambda e: (0 if e[0].endswith('.cnmt.nca') else 1, e[0]))
+
 		name = _safe_name(tname) if tname else None
-		final = os.path.join(outdir, '%s [%s] (MOD).nsp' % (name, titleid)) if name \
-			else os.path.join(outdir, '%s (MOD).nsp' % titleid)
+		if name and ver is not None:
+			final = os.path.join(outdir, '%s [%s] [v%d] (%s) (MOD).nsp' % (name, titleid, ver, comp))
+		elif name:
+			final = os.path.join(outdir, '%s [%s] (%s) (MOD).nsp' % (name, titleid, comp))
+		else:
+			final = os.path.join(outdir, '%s (%s) (MOD).nsp' % (titleid, comp))
 		os.makedirs(outdir, exist_ok=True)
 		if os.path.exists(final):
 			os.remove(final)
-		print('  -> 写入成品到输出目录 ...')
-		shutil.move(src_nsp, final)
+		print('  -> 打包成品（%s）...' % comp)
+		_pack_nsp(final, entries)
 
 		print('')
 		print('**************************************************************************')
 		print('  完成! 产物: %s' % final)
-		print('  大小: %.2f GB' % (os.path.getsize(final) / (1024 * 1024 * 1024)))
+		print('  大小: %.2f GB | 构成: %s' % (os.path.getsize(final) / (1024 * 1024 * 1024), comp))
 		if tname:
 			print('  名称: %s' % tname)
+		if update_prog is not None and not sel_is_update:
+			print('  注意: 源包含更新内容但未并入（安装本成品时请勿另装原版更新，')
+			print('        否则更新会覆盖 mod 化的本体）')
 		print('  注意: 重建的 NCA 无任天堂签名，安装需要大气层 sigpatches + DBI/Tinfoil，')
 		print('        或 SX OS。请勿在未破解主机上安装，请勿对外分发。')
 		print('  校验: 可用 squirrel -v "%s" 做完整性检查' % final)
