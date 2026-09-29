@@ -1,3 +1,18 @@
+# NSCB 2.0a 更新说明（2026-09-29 其五）：成品命名加入解析出的游戏名
+
+`_title_name` 存在双重缺陷导致成品名从未带上游戏名（一直回退为纯
+TitleID）：`Nacp(nacp_path)` 未传 mode 参数（`BaseFile` 只在
+`path and mode != None` 时才真正打开文件），且 `languages[i].name`
+仅在调用 `getName(i)` 时才解析。修复后按 NSCB 经典顺序（美英 →
+其他语言）取第一个非空显示名，成品命名为
+`游戏名 [TitleID] (MOD).nsp`。
+
+真实验收：海猫鸣泣之时咲（1G+1U + 汉化 mod，SDK 9.3.1 自动钳制）→
+`うみねこのなく頃に咲 ～猫箱と夢想の交響曲～ [01006a300ba2c000]
+(MOD).nsp`（4.2GB，EXIT=0）。
+
+---
+
 # NSCB 2.0a 更新说明（2026-09-28 其四）：ASCII 路径全链路 + 默认输出 NSCB_output
 
 其二/其三修复后的用户实测又暴露两处问题，本轮全部解决：

@@ -378,13 +378,21 @@ def _overlay(src, dst):
 
 
 def _title_name(nacp_path):
-	'''Best-effort title name from control.nacp'''
+	'''Best-effort title name from control.nacp: the first non-empty
+	display name across languages. Nacp must be opened with an explicit
+	mode (BaseFile skips opening otherwise) and only parses an entry
+	when getName(i) is called; both were missing before, so the name
+	silently resolved to None for every game.'''
 	try:
 		from Fs import Nacp
-		nc = Nacp(nacp_path)
-		for lang in nc.languages:
-			if lang.name:
-				return lang.name
+		nc = Nacp(nacp_path, 'rb')
+		try:
+			for i in range(len(nc.languages)):
+				name = nc.getName(i)
+				if name:
+					return name
+		finally:
+			nc.close()
 	except BaseException:
 		pass
 	return None
