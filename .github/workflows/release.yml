@@ -16,6 +16,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Verify .bat/.cmd are CRLF
+        run: |
+          python3 - <<'EOF'
+          import pathlib, sys
+          bad = [str(p) for p in pathlib.Path('.').rglob('*')
+                 if p.suffix.lower() in ('.bat', '.cmd') and b'\r\n' not in p.read_bytes()]
+          for p in bad:
+              print('::error::批处理脚本缺少 CRLF 换行（cmd.exe 无法解析）: ' + p)
+          sys.exit(1 if bad else 0)
+          EOF
+
       - name: Package runnable distribution
         run: |
           VERSION="${GITHUB_REF_NAME}"
