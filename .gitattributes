@@ -1,0 +1,3 @@
+# Windows 批处理脚本必须为 CRLF，否则 cmd.exe 解析错乱（CI/Linux 打包曾因此发布损坏版本）
+*.bat text eol=crlf
+*.cmd text eol=crlf
